@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>네이버 광고 계정 자가진단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12201A;
+    --bg-panel: #17281F;
+    --ink: #F2F5F0;
+    --ink-dim: #AEC2B7;
+    --line: rgba(242,245,240,0.14);
+    --green: #03C75A;
+    --yellow: #F0D23B;
+    --amber: #E8813A;
+    --orange: #E8813A;
+    --red: #D8302A;
+    --serif: 'Noto Serif KR', serif;
+    --sans: 'Noto Sans KR', sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    padding: 48px 20px 80px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  @media (max-width: 480px){
+    body{ padding: 28px 16px 60px; }
+  }
+  .sheet{
+    width: 100%;
+    max-width: 640px;
+  }
+  .masthead{
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+    display:flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .masthead .mark{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--green);
+  }
+  .masthead .meta{
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+  .progress-track{
+    height: 2px;
+    background: var(--line);
+    margin-bottom: 40px;
+    position: relative;
+    overflow:hidden;
+  }
+  .progress-fill{
+    position:absolute; left:0; top:0; height:100%;
+    background: var(--green);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .progress-fill, .view, .option{ transition:none !important; }
+  }
+
+  /* Intro */
+  #view-intro h1{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.35;
+    margin: 0 0 18px;
+  }
+  #view-intro p{
+    color: var(--ink-dim);
+    font-size: 18px;
+    line-height: 1.55;
+    max-width: 54ch;
+  }
+  .facts{
+    display:flex;
+    gap: 28px;
+    margin: 32px 0 40px;
+    flex-wrap: wrap;
+  }
+  .facts div{ font-size: 13px; color: var(--ink-dim); }
+  .facts strong{
+    display:block;
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  button.primary{
+    appearance:none;
+    border:none;
+    background: var(--green);
+    color: #0A150F;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 15.5px;
+    padding: 15px 28px;
+    cursor:pointer;
+    border-radius: 2px;
+  }
+  button.primary:hover{ background:#04dd66; }
+  button.primary:focus-visible{ outline: 2px solid var(--ink); outline-offset: 3px; }
+  button.ghost{
+    appearance:none;
+    background:none;
+    border:1px solid var(--line);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 12px 22px;
+    cursor:pointer;
+    border-radius: 2px;
+  }
+  button.ghost:hover{ border-color: var(--ink-dim); }
+
+  .btn-link{
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 15px;
+    text-decoration: none;
+    padding: 14px 26px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .btn-link.primary{ background: var(--green); color: #0A150F; font-weight: 700; }
+  .btn-link.primary:hover{ background: #04dd66; }
+  .btn-link.ghost{ border: 1px solid var(--line); color: var(--ink); }
+  .btn-link.ghost:hover{ border-color: var(--ink-dim); }
+  .btn-link:focus-visible{ outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  /* Question view */
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  .q-index{
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin-bottom: 10px;
+  }
+  .q-category{
+    font-size: 12.5px;
+    color: var(--green);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .q-text{
+    font-family: var(--serif);
+    font-size: 23px;
+    line-height: 1.5;
+    font-weight: 500;
+    margin: 0 0 28px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .option{
+    text-align:left;
+    border: 1px solid var(--line);
+    background: var(--bg-panel);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14.5px;
+    padding: 16px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .option:hover{ border-color: var(--ink-dim); }
+  .option:focus-visible{ outline: 2px solid var(--green); outline-offset: 2px; }
+  .option.selected{
+    border-color: var(--green);
+    background: rgba(3,199,90,0.10);
+  }
+  .nav-row{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+  }
+
+  /* Results */
+  #view-result h1{
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  #view-contact h1{
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 32px;
+  }
+  .score-block{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 0 32px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+  .score-wrap{
+    position: relative;
+    width: 188px;
+    height: 188px;
+    margin: 4px 0 18px;
+  }
+  .donut{
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .donut-track{
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 14;
+  }
+  .donut-fill{
+    fill: none;
+    stroke-width: 14;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease;
+  }
+  .donut-center{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num{
+    font-family: var(--serif);
+    font-size: 46px;
+    line-height: 1;
+    font-weight: 700;
+  }
+  .score-suffix{ font-size: 13px; color: var(--ink-dim); margin-top: 4px; }
+  .score-tag{
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 2px;
+    font-weight: 700;
+    display: inline-block;
+  }
+  .tag-danger{ background: rgba(216,48,42,0.16); color: var(--red); }
+  .tag-caution{ background: rgba(232,129,58,0.16); color: var(--orange); }
+  .tag-good{ background: rgba(240,210,59,0.18); color: var(--yellow); }
+  .tag-excellent{ background: rgba(3,199,90,0.15); color: var(--green); }
+
+  .score-desc{ color: var(--ink-dim); font-size: 14.5px; margin: 18px auto 36px; text-align:center; max-width: 46ch; }
+
+  .breakdown-title{
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin-bottom: 14px;
+    padding-top: 4px;
+  }
+  .cat-row{
+    display:grid;
+    grid-template-columns: 130px 1fr 34px;
+    align-items:center;
+    gap: 14px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+  }
+  .cat-row .cat-name{ color: var(--ink); }
+  .cat-bar-track{ height: 6px; background: var(--line); position:relative; border-radius:2px; overflow:hidden; }
+  .cat-bar-fill{ position:absolute; left:0; top:0; height:100%; border-radius:2px; }
+  .cat-score{ text-align:right; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+
+  .weak-section{ margin-top: 44px; }
+  .weak-section h2{
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .weak-section > p{ color: var(--ink-dim); font-size: 14px; margin: 0 0 20px; }
+  .weak-item{
+    border-left: 2px solid var(--red);
+    padding: 4px 0 4px 16px;
+    margin-bottom: 20px;
+  }
+  .weak-item .name{ font-weight: 700; font-size: 14.5px; margin-bottom: 4px; }
+  .weak-item .desc{ color: var(--ink-dim); font-size: 13.5px; }
+
+  .cta{
+    margin-top: 48px;
+    padding: 30px;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+  }
+  .cta h2{
+    font-family: var(--serif);
+    font-size: 20px;
+    margin: 0 0 10px;
+    font-weight: 500;
+  }
+  .cta p{ color: var(--ink-dim); font-size: 14px; margin: 0 0 22px; }
+  .cta-actions{ display:flex; gap: 10px; flex-wrap: wrap; }
+
+  .contact-fallback{
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .contact-row{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+  }
+  .contact-label{
+    color: var(--ink-dim);
+    width: 40px;
+    flex-shrink: 0;
+  }
+  .contact-value{
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    flex: 1;
+  }
+  .copy-btn{
+    appearance: none;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-family: var(--sans);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover{ border-color: var(--ink-dim); color: var(--ink); }
+  .copy-btn.copied{ border-color: var(--green); color: var(--green); }
+
+  .restart-row{ margin-top: 28px; text-align:center; }
+  .restart-row a{ color: var(--ink-dim); font-size: 13px; cursor:pointer; text-decoration: underline; }
+
+  /* Contact form */
+  .form-eyebrow{
+    font-size: 12.5px;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .form-intro{ color: var(--ink-dim); font-size: 14.5px; margin: 0 0 32px; }
+  .form-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    margin-bottom: 8px;
+  }
+  .field-full{ grid-column: 1 / -1; }
+  @media (max-width: 560px){
+    .form-grid{ grid-template-columns: 1fr; }
+  }
+  .field label{
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .field input, .field textarea, .field select{
+    width: 100%;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14.5px;
+    padding: 12px 14px;
+    border-radius: 2px;
+    resize: vertical;
+  }
+  .field select{
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23AEC2B7' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .field input::placeholder, .field textarea::placeholder{ color: var(--ink-dim); opacity: 0.7; }
+  .field input:focus, .field textarea:focus, .field select:focus{
+    outline: none;
+    border-color: var(--green);
+  }
+  .form-error{
+    color: var(--red);
+    font-size: 13.5px;
+    margin: 0 0 16px;
+  }
+  .thanks-wrap{
+    text-align: center;
+    padding: 60px 0 40px;
+  }
+  .thanks-icon{
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(3,199,90,0.15);
+    color: var(--green);
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .thanks-wrap h1{
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 10px;
+  }
+  .thanks-desc{ color: var(--ink-dim); font-size: 14.5px; }
+  .checkbox-group{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 6px;
+  }
+  .checkbox-item{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .checkbox-item input[type="checkbox"]{
+    width: 16px;
+    height: 16px;
+    accent-color: var(--green);
+    cursor: pointer;
+  }
+
+  /* On desktop, click-to-call / mail-app buttons don't make sense: hide them,
+     keep the plain-text contact info (with copy) as the desktop path. */
+  @media (min-width: 641px){
+    .cta-actions{ display: none; }
+  }
+  .desktop-cta{ display: none; }
+  @media (min-width: 641px){
+    .desktop-cta{ display: inline-block; margin-top: 18px; }
+  }
+  /* Small phones: shrink oversized headline/number/label elements that
+     don't scale down automatically with the fluid container. */
+  @media (max-width: 420px){
+    #view-intro h1{ font-size: 26px; }
+    .q-text{ font-size: 19px; }
+    .score-wrap{ width: 150px; height: 150px; }
+    .score-num{ font-size: 34px; }
+    .cat-row{
+      grid-template-columns: 92px 1fr 28px;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+    .masthead .mark{ font-size: 13px; }
+    .masthead .meta{ font-size: 11px; }
+    .facts{ gap: 18px; }
+    .facts strong{ font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="masthead">
+    <span class="mark">계정 자가진단</span>
+    <span class="meta">네이버 광고 · 소요시간 약 2분</span>
+  </div>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- INTRO -->
+  <div class="view active" id="view-intro">
+    <h1>우리 네이버 광고, 지금 몇 점일까요?</h1>
+    <p>10개 질문에 답하면 계정 관리 상태를 점수로 바로 확인할 수 있어요. 무엇이 문제이고 무엇을 놓치고 있는지 지금 확인해보세요.</p>
+    <div class="facts">
+      <div><strong>10문항</strong>핵심 점검 영역</div>
+      <div><strong>2분</strong>예상 소요시간</div>
+      <div><strong>즉시</strong>결과 확인</div>
+    </div>
+    <button class="primary" onclick="startQuiz()">진단 시작하기</button>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="view" id="view-question">
+    <div class="q-index" id="qIndex">질문 1 / 10</div>
+    <div class="q-category" id="qCategory"></div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="qOptions"></div>
+    <div class="nav-row">
+      <button class="ghost" id="prevBtn" onclick="prevQuestion()">이전</button>
+      <button class="ghost" id="skipHint" style="visibility:hidden;">답변을 선택해주세요</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="view" id="view-result">
+    <h1>진단 결과</h1>
+    <div class="score-block">
+      <div class="score-wrap">
+        <svg class="donut" viewBox="0 0 188 188">
+          <circle class="donut-track" cx="94" cy="94" r="80"></circle>
+          <circle class="donut-fill" id="donutFill" cx="94" cy="94" r="80"></circle>
+        </svg>
+        <div class="donut-center">
+          <span class="score-num" id="scoreNum">0</span>
+          <span class="score-suffix">/ 100</span>
+        </div>
+      </div>
+      <div class="score-tag" id="scoreTag">-</div>
+    </div>
+    <p class="score-desc" id="scoreDesc"></p>
+
+    <div class="breakdown-title">영역별 점수</div>
+    <div id="catBreakdown"></div>
+
+    <div class="weak-section" id="weakSection">
+      <h2>지금 개선이 필요한 부분</h2>
+      <p>아래 항목은 이번 진단에서 낮게 나온 영역입니다. 그대로 두면 성과에 영향을 줄 수 있어요.</p>
+      <div id="weakList"></div>
+    </div>
+
+    <div class="cta">
+      <h2>정확한 진단은 실제 계정 데이터로 확인해드립니다</h2>
+      <p>운영조회 권한(로그인 정보 불필요, 열람 전용)만 주시면 실제 데이터를 기반으로 위 항목들에 대한 상세 개선방안을 무료로 알려드립니다.</p>
+      <div class="cta-actions">
+        <button class="btn-link primary" style="border:none;font-family:inherit;cursor:pointer;" onclick="openContactForm()">이메일로 상담 신청</button>
+        <a class="btn-link ghost" href="tel:01032414127">전화로 문의하기</a>
+      </div>
+      <div class="contact-fallback">
+        <div class="contact-row">
+          <span class="contact-label">이메일</span>
+          <span class="contact-value" id="emailValue">wodus0117@toup.net</span>
+          <button class="copy-btn" onclick="copyContact('emailValue', this)">복사</button>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">전화</span>
+          <span class="contact-value" id="phoneValue">010-3241-4127</span>
+          <button class="copy-btn" onclick="copyContact('phoneValue', this)">복사</button>
+        </div>
+        <button class="btn-link primary desktop-cta" style="border:none;font-family:inherit;cursor:pointer;" onclick="openContactForm()">문의하기</button>
+      </div>
+    </div>
+
+    <div class="restart-row"><a onclick="restartQuiz()">다시 진단하기</a></div>
+  </div>
+
+  <!-- CONTACT FORM -->
+  <div class="view" id="view-contact">
+    <div class="form-eyebrow">네이버 광고 상담</div>
+    <h1>광고 계정 상담 신청</h1>
+    <form id="contactForm" onsubmit="submitContactForm(event)">
+      <div class="form-grid">
+        <div class="field">
+          <label for="fldName">성함 / 업체명 *</label>
+          <input type="text" id="fldName" placeholder="성함 또는 업체명" required>
+        </div>
+        <div class="field">
+          <label for="fldContact">연락처 *</label>
+          <input type="text" id="fldContact" placeholder="010-0000-0000" required>
+        </div>
+        <div class="field">
+          <label for="fldEmail">이메일</label>
+          <input type="email" id="fldEmail" placeholder="선택 입력">
+        </div>
+        <div class="field">
+          <label for="fldStatus">현재 광고 운영 형태</label>
+          <select id="fldStatus">
+            <option value="">선택하지 않음</option>
+            <option value="직접 운영 중">직접 운영 중</option>
+            <option value="대행사 이용 중">대행사 이용 중</option>
+            <option value="아직 시작 전">아직 시작 전</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fldBudget">월 광고비 규모</label>
+          <select id="fldBudget">
+            <option value="">선택하지 않음</option>
+            <option value="100만원 미만">100만원 미만</option>
+            <option value="100~300만원">100~300만원</option>
+            <option value="300~500만원">300~500만원</option>
+            <option value="500만원 이상">500만원 이상</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fldTime">상담 희망 시간</label>
+          <select id="fldTime">
+            <option value="언제든 가능">언제든 가능</option>
+            <option value="오전">오전</option>
+            <option value="오후">오후</option>
+            <option value="저녁">저녁</option>
+          </select>
+        </div>
+        <div class="field field-full">
+          <label>진행중인 온라인 광고</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" value="네이버" class="ad-platform">네이버</label>
+            <label class="checkbox-item"><input type="checkbox" value="메타" class="ad-platform">메타</label>
+            <label class="checkbox-item"><input type="checkbox" value="구글" class="ad-platform">구글</label>
+            <label class="checkbox-item"><input type="checkbox" value="기타" class="ad-platform">기타</label>
+          </div>
+        </div>
+        <div class="field field-full">
+          <label for="fldUrl">광고 진행 중인 홈페이지 URL</label>
+          <input type="url" id="fldUrl" placeholder="https://example.com">
+        </div>
+        <div class="field field-full">
+          <label for="fldMessage">문의 내용</label>
+          <textarea id="fldMessage" rows="4" placeholder="궁금한 점이나 지금 상황을 간단히 적어주세요"></textarea>
+        </div>
+      </div>
+      <p class="form-error" id="contactFormError" style="display:none;"></p>
+      <div class="nav-row">
+        <button type="button" class="ghost" onclick="showView('view-result')">이전으로</button>
+        <button type="submit" class="primary" id="contactSubmitBtn">상담 신청 보내기</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- THANK YOU -->
+  <div class="view" id="view-thanks">
+    <div class="thanks-wrap">
+      <div class="thanks-icon">✓</div>
+      <h1>접수되었습니다</h1>
+      <p class="thanks-desc">남겨주신 내용 확인 후 빠르게 연락드리겠습니다.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    category: "변경이력 관리",
+    text: "광고 담당자(대행사 포함)가 캠페인을 얼마나 자주 들여다보고 조정하나요?",
+    options: [
+      { label: "거의 만지지 않는다 (설정 후 방치)", score: 0 },
+      { label: "문제가 생겼을 때만 가끔 확인한다", score: 1 },
+      { label: "한 달에 몇 번 정도 점검한다", score: 2 },
+      { label: "매주 꾸준히 점검하고 조정한다", score: 3 },
+    ],
+    weakNote: "담당자의 관리가 뜸하면 입찰가·예산이 시장 변화를 따라가지 못해 비효율이 계속 쌓입니다."
+  },
+  {
+    category: "노출제한 관리",
+    text: "무효클릭(경쟁사·이상 클릭 등)을 막기 위한 조치를 하고 있나요?",
+    options: [
+      { label: "그런 게 있는지도 몰랐다", score: 0 },
+      { label: "필요성은 알지만 따로 설정한 적 없다", score: 1 },
+      { label: "일부 설정은 되어 있다", score: 2 },
+      { label: "IP 차단 등 체계적으로 관리되고 있다", score: 3 },
+    ],
+    weakNote: "무효클릭 차단이 안 되어 있으면 경쟁사·이상 클릭 등으로 불필요한 클릭 비용이 계속 발생할 수 있습니다."
+  },
+  {
+    category: "데이터 분석",
+    text: "검색어, 기기(PC/모바일), 성별·연령대별 성과를 나눠서 분석하고 있나요?",
+    options: [
+      { label: "전혀 나눠 보지 않는다", score: 0 },
+      { label: "가끔 전체 숫자만 확인한다", score: 1 },
+      { label: "항목별로 보긴 하지만 반영은 잘 안 한다", score: 2 },
+      { label: "정기적으로 분석해서 예산·타겟팅에 반영한다", score: 3 },
+    ],
+    weakNote: "세분화 분석 없이는 어떤 조건에서 효율이 좋은지 알 수 없어 예산 배분이 비효율적일 수밖에 없습니다."
+  },
+  {
+    category: "캠페인 구조",
+    text: "파워링크, 쇼핑검색, 브랜드검색 등 광고 상품을 목적에 맞게 나눠 운영하고 있나요?",
+    options: [
+      { label: "광고 상품 종류를 잘 모른다", score: 0 },
+      { label: "한 가지 상품만 운영 중이다", score: 1 },
+      { label: "몇 가지는 쓰고 있지만 정리는 안 되어있다", score: 2 },
+      { label: "목적별로 나눠서 체계적으로 운영 중이다", score: 3 },
+    ],
+    weakNote: "상품을 목적에 맞게 나눠 쓰지 않으면 노출 기회와 전환 기회를 그대로 놓치게 됩니다."
+  },
+  {
+    category: "키워드 관리",
+    text: "제외 키워드나 검색 범위 설정을 관리해서 불필요한 노출을 줄이고 있나요?",
+    options: [
+      { label: "그런 설정을 해본 적이 없다", score: 0 },
+      { label: "처음에만 설정하고 그대로 두었다", score: 1 },
+      { label: "가끔 검색어를 확인해서 제외한다", score: 2 },
+      { label: "정기적으로 검색어를 점검하고 관리한다", score: 3 },
+    ],
+    weakNote: "제외 키워드 관리가 없으면 관련 없는 검색에도 비용이 계속 소진됩니다."
+  },
+  {
+    category: "소재 관리",
+    text: "광고 문구, 이미지, 서브링크 같은 확장소재를 얼마나 자주 교체·보강하나요?",
+    options: [
+      { label: "처음 만든 그대로 쓰고 있다", score: 0 },
+      { label: "생각날 때 한 번씩 바꾼다", score: 1 },
+      { label: "몇 달에 한 번은 점검한다", score: 2 },
+      { label: "주기적으로 테스트하며 교체한다", score: 3 },
+    ],
+    weakNote: "오래된 소재는 클릭률이 떨어지고, 결국 같은 예산으로 더 적은 유입을 얻게 됩니다."
+  },
+  {
+    category: "예산·순위 관리",
+    text: "하루 예산이 부족해서 광고가 중간에 꺼지는 경우가 있나요?",
+    options: [
+      { label: "자주 그렇다 (오후에 꺼지곤 한다)", score: 0 },
+      { label: "가끔 그렇다", score: 1 },
+      { label: "거의 없다", score: 2 },
+      { label: "전혀 없고, 성과 좋은 곳에 예산이 우선 배정된다", score: 3 },
+    ],
+    weakNote: "예산이 일찍 소진되면 남은 시간의 노출 기회를 그대로 잃게 됩니다."
+  },
+  {
+    category: "전환추적",
+    text: "문의·구매 전환이 정확하게 잡히고 있는지 확인해본 적 있나요?",
+    options: [
+      { label: "전환추적이 뭔지 잘 모른다", score: 0 },
+      { label: "설정은 되어 있는 것 같은데 확인은 안 해봤다", score: 1 },
+      { label: "확인해봤고 대체로 맞는 것 같다", score: 2 },
+      { label: "정기적으로 점검하고 데이터를 신뢰한다", score: 3 },
+    ],
+    weakNote: "전환 추적이 정확하지 않으면 실제 성과를 알 수 없어 잘못된 판단으로 이어질 수 있습니다."
+  },
+  {
+    category: "경쟁 현황",
+    text: "같은 업종 경쟁사와 비교했을 때 우리 광고의 노출 순위나 점유율이 어느 정도인지 알고 계신가요?",
+    options: [
+      { label: "전혀 모른다", score: 0 },
+      { label: "대략 감으로만 알고 있다", score: 1 },
+      { label: "가끔 확인해본다", score: 2 },
+      { label: "정기적으로 비교하고 대응하고 있다", score: 3 },
+    ],
+    weakNote: "경쟁사 대비 위치를 모르면 예산을 늘려야 할지 줄여야 할지 판단할 기준이 없습니다."
+  },
+  {
+    category: "성과 트렌드",
+    text: "최근 몇 달간 클릭률·전환율 같은 성과가 좋아지는지 나빠지는지 알고 계신가요?",
+    options: [
+      { label: "전혀 모른다", score: 0 },
+      { label: "대략적인 느낌만 있다", score: 1 },
+      { label: "숫자는 보는데 원인 분석은 안 한다", score: 2 },
+      { label: "추세를 파악하고 원인까지 분석하고 있다", score: 3 },
+    ],
+    weakNote: "추세를 모르면 문제가 커지기 전에 대응할 타이밍을 놓치게 됩니다."
+  },
+];
+
+let current = 0;
+const answers = new Array(QUESTIONS.length).fill(null);
+let lastPct = null;
+let lastBandLabel = '';
+let lastWeakCategories = [];
+
+function showView(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz(){
+  current = 0;
+  showView('view-question');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  document.getElementById('qIndex').textContent = `질문 ${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('qCategory').textContent = q.category;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('progressFill').style.width = `${(current/QUESTIONS.length)*100}%`;
+
+  const optWrap = document.getElementById('qOptions');
+  optWrap.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option' + (answers[current] === opt.score ? ' selected' : '');
+    btn.textContent = opt.label;
+    btn.onclick = () => selectAnswer(opt.score);
+    optWrap.appendChild(btn);
+  });
+
+  document.getElementById('prevBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+function selectAnswer(score){
+  answers[current] = score;
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function prevQuestion(){
+  if(current > 0){
+    current--;
+    renderQuestion();
+  }
+}
+
+function bandFor(pct){
+  if(pct <= 50) return { color: 'var(--red)', label: '위험', tagClass: 'tag-danger',
+    desc: '여러 영역에서 관리가 제대로 이루어지지 않고 있습니다.<br>지금 바로 계정 점검을 권장합니다.' };
+  if(pct <= 80) return { color: 'var(--orange)', label: '주의', tagClass: 'tag-caution',
+    desc: '몇 가지 영역에 관리가 느슨해져 있습니다.<br>놓치고 있는 부분 점검이 필요한 시점입니다.' };
+  if(pct <= 90) return { color: 'var(--yellow)', label: '양호', tagClass: 'tag-good',
+    desc: '전반적인 관리 상태는 양호합니다.<br>다만 세부 항목에서 놓친 부분이 있는지 확인이 필요합니다.' };
+  return { color: 'var(--green)', label: '우수', tagClass: 'tag-excellent',
+    desc: '꼼꼼하게 관리가 되고 있습니다.<br>세부 항목만 다듬으면 됩니다.' };
+}
+
+function showResults(){
+  document.getElementById('progressFill').style.width = '100%';
+  const total = answers.reduce((a,b) => a + b, 0);
+  const max = QUESTIONS.length * 3;
+  const pct = Math.round((total / max) * 100);
+
+  const band = bandFor(pct);
+  lastPct = pct;
+  lastBandLabel = band.label;
+  lastWeakCategories = QUESTIONS.filter((q, i) => answers[i] <= 1).map(q => q.category);
+
+  document.getElementById('scoreNum').textContent = pct;
+  document.getElementById('scoreNum').style.color = band.color;
+
+  const R = 80;
+  const C = 2 * Math.PI * R;
+  const donut = document.getElementById('donutFill');
+  donut.style.stroke = band.color;
+  donut.style.strokeDasharray = `${C}`;
+  donut.style.strokeDashoffset = `${C}`;
+  // trigger transition on next frame
+  requestAnimationFrame(() => {
+    donut.style.strokeDashoffset = `${C - (pct/100) * C}`;
+  });
+
+  const tagEl = document.getElementById('scoreTag');
+  tagEl.textContent = band.label;
+  tagEl.className = 'score-tag ' + band.tagClass;
+  document.getElementById('scoreDesc').innerHTML = band.desc;
+
+  const catWrap = document.getElementById('catBreakdown');
+  catWrap.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const s = answers[i];
+    const catColors = ['var(--red)', 'var(--orange)', 'var(--yellow)', 'var(--green)'];
+    const color = catColors[s];
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML = `
+      <div class="cat-name">${q.category}</div>
+      <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${(s/3)*100}%; background:${color};"></div></div>
+      <div class="cat-score">${s}/3</div>
+    `;
+    catWrap.appendChild(row);
+  });
+
+  const weakList = document.getElementById('weakList');
+  weakList.innerHTML = '';
+  const weakItems = QUESTIONS.filter((q, i) => answers[i] <= 1);
+  if(weakItems.length === 0){
+    document.getElementById('weakSection').style.display = 'none';
+  } else {
+    document.getElementById('weakSection').style.display = 'block';
+    weakItems.forEach(q => {
+      const div = document.createElement('div');
+      div.className = 'weak-item';
+      div.innerHTML = `<div class="name">${q.category}</div><div class="desc">${q.weakNote}</div>`;
+      weakList.appendChild(div);
+    });
+  }
+
+  showView('view-result');
+}
+
+function copyContact(elId, btn){
+  const text = document.getElementById(elId).textContent;
+  const done = () => {
+    const original = btn.textContent;
+    btn.textContent = '복사됨';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 1500);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try{ document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+  done();
+}
+
+function openContactForm(){
+  showView('view-contact');
+}
+
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xbgjqqrr';
+
+async function submitContactForm(e){
+  e.preventDefault();
+  const name = document.getElementById('fldName').value.trim();
+  const contact = document.getElementById('fldContact').value.trim();
+  const email = document.getElementById('fldEmail').value.trim();
+  const status = document.getElementById('fldStatus').value;
+  const budget = document.getElementById('fldBudget').value;
+  const time = document.getElementById('fldTime').value;
+  const platforms = Array.from(document.querySelectorAll('.ad-platform:checked')).map(cb => cb.value).join(', ');
+  const url = document.getElementById('fldUrl').value.trim();
+  const message = document.getElementById('fldMessage').value.trim();
+
+  const scoreLine = lastPct !== null ? `${lastPct}/100 (${lastBandLabel})` : '자가진단 미완료';
+  const weakLine = lastWeakCategories.length > 0 ? lastWeakCategories.join(', ') : '없음';
+
+  const submitBtn = document.getElementById('contactSubmitBtn');
+  const errorEl = document.getElementById('contactFormError');
+  errorEl.style.display = 'none';
+  const originalLabel = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = '보내는 중...';
+
+  const payload = {
+    _subject: '상담신청',
+    성함_업체명: name,
+    연락처: contact,
+    이메일: email || '(작성 안 함)',
+    현재_광고_운영_형태: status || '(선택 안 함)',
+    월_광고비_규모: budget || '(선택 안 함)',
+    상담_희망_시간: time,
+    진행중인_온라인_광고: platforms || '(선택 안 함)',
+    홈페이지_URL: url || '(작성 안 함)',
+    자가진단_점수: scoreLine,
+    개선_필요_영역: weakLine,
+    문의_내용: message || '(작성 안 함)',
+  };
+
+  try{
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if(!res.ok) throw new Error('submit failed');
+    showView('view-thanks');
+  } catch(err){
+    errorEl.textContent = '전송 중 문제가 발생했습니다. 잠시 후 다시 시도해주시거나, 위에 안내된 전화번호로 연락해주세요.';
+    errorEl.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalLabel;
+  }
+}
+
+function restartQuiz(){
+  answers.fill(null);
+  current = 0;
+  document.getElementById('progressFill').style.width = '0%';
+  showView('view-intro');
+}
+</script>
+</body>
+</html>

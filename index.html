@@ -19,7 +19,9 @@ p.d{color:#5b6478}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:36px}
 a.m{display:block;border-top:4px solid var(--ac,#1a56ff)!important;background:#fff;border:1px solid #e4e8f0;border-radius:18px;overflow:hidden;color:inherit;text-decoration:none;transition:border-color .15s}
 a.m:hover{border-color:var(--ac,#1a56ff)}
-a.m img{width:100%;aspect-ratio:4/4.4;object-fit:cover;object-position:top;display:block;background:#e9eef8}
+a.m .pic{display:flex;align-items:flex-end;justify-content:center;aspect-ratio:4/4.4;overflow:hidden;background:radial-gradient(120% 90% at 50% 100%,color-mix(in srgb,var(--ac) 22%,#fff) 0%,#f6f7fb 70%)}
+a.m .pic img{display:block;height:86%;width:auto;max-width:96%;object-fit:contain;object-position:bottom;transition:transform .25s;transform-origin:bottom center}
+a.m:hover .pic img{transform:scale(1.03)}
 a.m div{padding:16px 18px}
 a.m strong{font-size:18px}
 a.m span{display:block;color:#5b6478;font-size:14px;margin-top:2px}
@@ -36,19 +38,19 @@ footer{color:#98a1b3;font-size:13px;margin-top:48px}
   <p class="links"><a href="http://toup.co.kr/" target="_blank" rel="noopener">미래아이엔씨 공식 홈페이지 ↗</a><a href="https://ads.naver.com/sub/partner" target="_blank" rel="noopener">네이버 공식 파트너 확인 ↗</a></p>
   <div class="grid">
     <a class="m" href="kimjaeyeon/index.html" style="--ac:#1a56ff">
-      <img src="kimjaeyeon/profile.jpg" alt="미래아이엔씨 김재연 주임">
+      <picture class="pic"><source srcset="cards/kimjaeyeon-v1.webp" type="image/webp"><img src="cards/kimjaeyeon-v1.png" alt="미래아이엔씨 김재연 주임"></picture>
       <div><strong>김재연 주임</strong><span>MA3 본부 · 검색광고 · GFA · AI탭</span></div>
     </a>
     <a class="m" href="hwangdongsu/index.html" style="--ac:#4b3fd8">
-      <img src="hwangdongsu/profile.jpg" alt="미래아이엔씨 황동수 주임">
+      <picture class="pic"><source srcset="cards/hwangdongsu-v1.webp" type="image/webp"><img src="cards/hwangdongsu-v1.png" alt="미래아이엔씨 황동수 주임"></picture>
       <div><strong>황동수 주임</strong><span>MA3 본부 · 쇼핑검색 · ADVoost Screen</span></div>
     </a>
     <a class="m" href="hwangseongin/index.html" style="--ac:#e0457b">
-      <img src="hwangseongin/profile.jpg" alt="미래아이엔씨 황성인 주임">
+      <picture class="pic"><source srcset="cards/hwangseongin-v1.webp" type="image/webp"><img src="cards/hwangseongin-v1.png" alt="미래아이엔씨 황성인 주임"></picture>
       <div><strong>황성인 주임</strong><span>MA3 본부 · 업종 분석 · 매체 믹스</span></div>
     </a>
     <a class="m" href="kangheejin/index.html" style="--ac:#ec6a1f">
-      <img src="kangheejin/profile.jpg" alt="미래아이엔씨 강희진 주임">
+      <picture class="pic"><source srcset="cards/kangheejin-v1.webp" type="image/webp"><img src="cards/kangheejin-v1.png" alt="미래아이엔씨 강희진 주임"></picture>
       <div><strong>강희진 주임</strong><span>MA3 본부 · 계정 점검 · 문의형 업종</span></div>
     </a>
   </div>

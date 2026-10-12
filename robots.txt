@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://miraeinc-ma3.github.io/sitemap.xml

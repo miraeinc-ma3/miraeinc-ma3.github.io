@@ -230,14 +230,14 @@ document.querySelectorAll('dialog.sm').forEach(d=>{d.querySelector('.x').addEven
 </footer>
 
 <script>
-var ENDPOINT='https://formspree.io/f/xbgjqqrr';
+var ENDPOINT='https://formsubmit.co/ajax/wodus0117@toup.net';
 document.getElementById('inq').addEventListener('submit',async function(e){
   e.preventDefault();
   var sb=document.getElementById('sb'),fm=document.getElementById('fm');
   var v=function(id){return document.getElementById(id).value.trim();};
-  var payload={_subject:'[담당자 페이지] 김재연 주임 광고문의',업체명:v('n'),사이트URL:v('u')||'(작성 안 함)',담당자:v('m'),연락처:v('p'),이메일:v('e')||'(작성 안 함)',광고상품:v('g')||'(선택 안 함)',월_광고예산:v('b')||'(선택 안 함)',문의내용:v('msg')||'(작성 안 함)'};
+  var payload={_subject:'[담당자 페이지] 김재연 주임 광고문의',_template:'table',_captcha:'false',업체명:v('n'),사이트URL:v('u')||'(작성 안 함)',담당자:v('m'),연락처:v('p'),이메일:v('e')||'(작성 안 함)',광고상품:v('g')||'(선택 안 함)',월_광고예산:v('b')||'(선택 안 함)',문의내용:v('msg')||'(작성 안 함)'};
   sb.disabled=true;sb.textContent='보내는 중...';fm.style.display='none';
-  try{var r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});if(!r.ok)throw 0;this.reset();fm.style.color='#4458e2';fm.textContent='문의가 접수되었습니다. 확인 후 연락드리겠습니다.';}
+  try{var r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});var j=await r.json().catch(function(){return {};});if(!r.ok||String(j.success)!=='true')throw 0;this.reset();fm.style.color='#4458e2';fm.textContent='문의가 접수되었습니다. 확인 후 연락드리겠습니다.';}
   catch(err){fm.style.color='#d8302a';fm.textContent='전송 중 문제가 생겼습니다. 010-3241-4127으로 연락 주세요.';}
   finally{fm.style.display='block';sb.disabled=false;sb.textContent='문의하기 ›';}
 });

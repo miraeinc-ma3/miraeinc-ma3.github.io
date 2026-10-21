@@ -4,564 +4,263 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>네이버 광고 계정 자가진단</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   :root{
-    --bg: #12201A;
-    --bg-panel: #17281F;
-    --ink: #F2F5F0;
-    --ink-dim: #AEC2B7;
-    --line: rgba(242,245,240,0.14);
-    --green: #03C75A;
-    --yellow: #F0D23B;
-    --amber: #E8813A;
-    --orange: #E8813A;
-    --red: #D8302A;
-    --serif: 'Noto Serif KR', serif;
-    --sans: 'Noto Sans KR', sans-serif;
+    --brand:#4458e2; --brand-2:#5a6cf0; --brand-dark:#3343c4;
+    --tint-1:#f4f6ff; --tint-2:#eef0fd; --tint-3:#dfe4fc; --tint-4:#c9d0fb;
+    --ink:#171d3a; --muted:#5b6483; --line:#dfe4fc; --bg:#fff;
+    --red:#d8302a; --orange:#e8813a; --yellow:#f2a31b; --green:#0f8a5a;
+    --radius:16px; --grad:linear-gradient(135deg,#5a6cf0,#3343c4);
   }
-  *{ box-sizing: border-box; }
-  html,body{ margin:0; padding:0; }
-  body{
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    line-height: 1.6;
-    min-height: 100vh;
-    display:flex;
-    justify-content:center;
-    padding: 48px 20px 80px;
-    word-break: keep-all;
-    overflow-wrap: break-word;
-  }
-  @media (max-width: 480px){
-    body{ padding: 28px 16px 60px; }
-  }
-  .sheet{
-    width: 100%;
-    max-width: 640px;
-  }
-  .masthead{
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 20px;
-    margin-bottom: 32px;
-    display:flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .masthead .mark{
-    font-family: var(--serif);
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.02em;
-    color: var(--green);
-  }
-  .masthead .meta{
-    font-size: 12px;
-    color: var(--ink-dim);
-  }
-  .progress-track{
-    height: 2px;
-    background: var(--line);
-    margin-bottom: 40px;
-    position: relative;
-    overflow:hidden;
-  }
-  .progress-fill{
-    position:absolute; left:0; top:0; height:100%;
-    background: var(--green);
-    width: 0%;
-    transition: width 0.4s ease;
-  }
-  @media (prefers-reduced-motion: reduce){
-    .progress-fill, .view, .option{ transition:none !important; }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+  /* topbar + gnb (마케터 페이지와 동일한 구성) */
+  .topbar{background:var(--grad);color:#fff;font-size:13px;}
+  .topbar .tb{max-width:1040px;margin:0 auto;padding:9px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .topbar a{font-weight:700;white-space:nowrap;cursor:pointer;}
+  .gnb{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+  .gnb .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;}
+  .logo{display:flex;align-items:baseline;gap:10px;}
+  .logo b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.2px;}
+  .logo b i{font-style:normal;color:var(--brand);}
+  .logo span{font-size:13px;color:var(--muted);}
+  .gnb nav{display:flex;gap:18px;font-size:14px;font-weight:600;}
+  .gnb nav a{color:var(--muted);}
+  .gnb nav a:hover{color:var(--brand);}
+  @media (max-width:560px){.logo span{display:none;} .topbar .tb span{font-size:12px;} .wrap,.topbar .tb{padding-left:16px;padding-right:16px;}}
+
+  .block{padding:56px 0 72px;}
+  .block.soft{background:var(--tint-1);}
+  @media (max-width:560px){.block{padding:36px 0 52px;}}
+  .sheet{max-width:760px;margin:0 auto;scroll-margin-top:76px;}
+
+  .kicker{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:14px;flex-wrap:wrap;}
+  .kicker b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:800;color:var(--brand);background:var(--tint-2);padding:4px 12px;border-radius:999px;font-size:13px;}
+  .kicker span{color:var(--muted);font-weight:500;}
+  h1.title{font-size:34px;line-height:1.35;font-weight:800;letter-spacing:-.8px;margin:0 0 12px;}
+  h1.title em{font-style:normal;color:var(--brand);}
+  .desc{color:var(--muted);font-size:16px;margin:0 0 26px;max-width:620px;}
+  @media (max-width:560px){h1.title{font-size:26px;} .desc{font-size:15px;}}
+
+  /* 진행 막대 */
+  .progress-track{height:6px;background:var(--tint-3);border-radius:999px;margin-bottom:28px;position:relative;overflow:hidden;}
+  .progress-fill{position:absolute;left:0;top:0;height:100%;background:var(--grad);border-radius:999px;width:0%;transition:width .4s ease;}
+  @media (prefers-reduced-motion: reduce){.progress-fill,.view,.option,.donut-fill{transition:none !important;}}
+
+  .view{display:none;}
+  .view.active{display:block;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 6px 24px rgba(51,67,196,.06);}
+  .card + .card{margin-top:18px;}
+  @media (max-width:560px){.card{padding:20px;}}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:15px 26px;border-radius:12px;border:none;font-size:16px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s,border-color .15s;text-decoration:none;}
+  .btn-primary{background:var(--grad);color:#fff;}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(51,67,196,.28);}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--tint-4);}
+  .btn-ghost:hover{border-color:var(--brand);color:var(--brand);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn:focus-visible,.option:focus-visible{outline:3px solid rgba(68,88,226,.35);outline-offset:2px;}
+  .btn-sm{padding:11px 20px;font-size:14px;}
+
+  /* 인트로 */
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 28px;}
+  .fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13px;color:var(--muted);}
+  .fact strong{display:block;font-size:22px;font-weight:800;color:var(--brand);letter-spacing:-.4px;margin-bottom:2px;}
+  @media (max-width:560px){.facts{gap:8px;}.fact{padding:14px 12px;font-size:12px;}.fact strong{font-size:19px;}}
+
+  /* 질문 */
+  .q-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  .q-index{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-size:13px;font-weight:800;color:var(--brand);background:var(--tint-2);padding:4px 12px;border-radius:999px;}
+  .q-category{font-size:14px;color:var(--muted);font-weight:700;}
+  .q-text{font-size:23px;line-height:1.5;font-weight:800;letter-spacing:-.5px;margin:0 0 22px;}
+  .options{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+  .option{text-align:left;border:1px solid var(--tint-4);background:#fff;color:var(--ink);font-size:15.5px;font-weight:500;padding:16px 18px;border-radius:12px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;}
+  .option:hover{border-color:var(--brand);background:var(--tint-1);}
+  .option.selected{border-color:var(--brand);background:var(--tint-2);box-shadow:0 0 0 3px rgba(68,88,226,.18);font-weight:700;}
+  .nav-row{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  @media (max-width:560px){.q-text{font-size:19px;}.option{font-size:15px;padding:14px 16px;}}
+
+  /* 결과 */
+  .res-title{font-size:28px;font-weight:800;letter-spacing:-.6px;margin:0 0 18px;}
+  .score-block{display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 0 0;}
+  .score-wrap{position:relative;width:188px;height:188px;margin:2px 0 16px;}
+  .donut{width:100%;height:100%;transform:rotate(-90deg);}
+  .donut-track{fill:none;stroke:var(--tint-3);stroke-width:14;}
+  .donut-fill{fill:none;stroke-width:14;stroke-linecap:round;transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s ease;}
+  .donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .score-num{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-size:50px;line-height:1;font-weight:800;letter-spacing:-1px;}
+  .score-suffix{font-size:13px;color:var(--muted);margin-top:4px;font-weight:600;}
+  .score-tag{font-size:14px;padding:6px 18px;border-radius:999px;font-weight:800;display:inline-block;}
+  .tag-danger{background:#fdeceb;color:var(--red);}
+  .tag-caution{background:#fdf0e5;color:#c4621c;}
+  .tag-good{background:#fdf5df;color:#a97300;}
+  .tag-excellent{background:#e3f6ec;color:var(--green);}
+  .score-desc{color:var(--muted);font-size:15px;margin:16px auto 4px;text-align:center;max-width:46ch;}
+
+  .card h2{font-size:18px;font-weight:800;margin:0 0 4px;letter-spacing:-.3px;}
+  .card .sub{color:var(--muted);font-size:14px;margin:0 0 16px;}
+  .cat-row{display:grid;grid-template-columns:130px 1fr 34px;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--tint-3);font-size:14px;}
+  .cat-row:first-of-type{border-top:none;}
+  .cat-name{font-weight:600;}
+  .cat-bar-track{height:8px;background:var(--tint-2);position:relative;border-radius:999px;overflow:hidden;}
+  .cat-bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:999px;}
+  .cat-score{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700;}
+
+  .weak-item{background:#fdf6f6;border:1px solid #f6d9d7;border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+  .weak-item:last-child{margin-bottom:0;}
+  .weak-item .name{font-weight:800;font-size:15px;margin-bottom:3px;color:var(--red);}
+  .weak-item .desc{color:var(--muted);font-size:14px;margin:0;max-width:none;}
+
+  /* 상담 안내 카드 */
+  .cta{background:linear-gradient(180deg,var(--tint-1),#fff);border-color:var(--brand);}
+  .cta h2{font-size:20px;line-height:1.45;margin-bottom:10px;}
+  .cta p{color:var(--muted);font-size:14.5px;margin:0 0 16px;}
+  .cta .cta-scarcity{color:var(--red);font-size:14px;font-weight:800;margin:0 0 20px;}
+  .cta-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .cta-actions .btn{flex:1;min-width:150px;}
+  @media (max-width:560px){.cta-actions{flex-direction:column;}.cta-actions .btn{flex:none;width:100%;}}
+  .contact-fallback{margin-top:20px;padding-top:16px;border-top:1px solid var(--tint-3);display:flex;flex-direction:column;gap:10px;}
+  .contact-row{display:flex;align-items:center;gap:10px;font-size:14px;}
+  .contact-label{color:var(--muted);width:44px;flex-shrink:0;font-weight:600;}
+  .contact-value{color:var(--ink);font-variant-numeric:tabular-nums;flex:1;font-weight:700;overflow-wrap:anywhere;}
+  .copy-btn{background:#fff;border:1px solid var(--tint-4);color:var(--muted);font-size:12.5px;font-weight:700;padding:6px 14px;border-radius:999px;cursor:pointer;flex-shrink:0;transition:border-color .15s,color .15s;}
+  .copy-btn:hover{border-color:var(--brand);color:var(--brand);}
+  .copy-btn.copied{border-color:var(--green);color:var(--green);}
+  .restart-row{margin-top:24px;text-align:center;}
+  .restart-row a{color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline;}
+
+  /* 상담 신청 폼 (마케터 페이지 문의 폼과 같은 구성) */
+  .form-title{font-size:26px;font-weight:800;letter-spacing:-.6px;margin:0 0 20px;}
+  .frow{display:grid;grid-template-columns:124px 1fr;gap:0;align-items:center;margin-bottom:14px;}
+  .frow.top{align-items:start;}
+  .frow.top label{padding-top:14px;}
+  .frow label{font-size:14px;font-weight:700;color:#111;}
+  .frow label i{font-style:normal;color:var(--brand);margin-left:2px;}
+  .frow input,.frow select,.frow textarea{width:100%;background:#f3f4f8;border:1px solid transparent;border-radius:10px;padding:0 16px;height:46px;font-family:inherit;font-size:15px;color:var(--ink);outline:none;box-shadow:none;transition:border-color .15s,box-shadow .15s,background .15s;}
+  .frow textarea{height:130px;padding:14px 16px;line-height:1.6;resize:vertical;}
+  .frow select{padding-right:12px;cursor:pointer;}
+  .frow input::placeholder,.frow textarea::placeholder{color:#8b91a6;}
+  .frow input:focus,.frow select:focus,.frow textarea:focus{background:#fff;border-color:var(--brand);box-shadow:0 0 0 3px rgba(68,88,226,.14);}
+  @media (max-width:560px){.frow{grid-template-columns:1fr;gap:6px;}.frow.top label{padding-top:0;}}
+  .agree{display:flex;align-items:center;gap:8px;font-size:13px;color:#333;font-weight:700;margin:8px 0 6px 124px;cursor:pointer;}
+  .agree input{width:16px;height:16px;flex:none;accent-color:var(--brand);margin:0;}
+  .consent-detail{font-size:12px;color:var(--muted);line-height:1.65;margin:0 0 20px 124px;}
+  @media (max-width:560px){.agree,.consent-detail{margin-left:0;}}
+  .form-error{color:var(--red);font-size:14px;font-weight:700;margin:0 0 14px;}
+  .form-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .form-actions .btn-primary{flex:1;max-width:260px;background:var(--brand);border-radius:10px;padding:15px;}
+  .form-actions .btn-primary:hover{background:var(--brand-dark);transform:none;box-shadow:none;}
+  .form-actions .btn-ghost{border-radius:10px;padding:15px 22px;}
+
+  .thanks-wrap{text-align:center;padding:36px 0 24px;}
+  .thanks-icon{width:60px;height:60px;border-radius:50%;background:var(--tint-2);color:var(--brand);font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+  .thanks-wrap h1{font-size:26px;font-weight:800;letter-spacing:-.5px;margin:0 0 8px;}
+  .thanks-desc{color:var(--muted);font-size:15px;margin:0 0 22px;}
+
+  .foot{background:#10152e;color:#aab1d1;padding:34px 0;font-size:13px;}
+  .foot b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;color:#fff;font-size:17px;}
+  .foot p{margin:4px 0;}
+  .foot a{color:#c9d0fb;}
+
+  @media (max-width:420px){
+    .score-wrap{width:156px;height:156px;} .score-num{font-size:40px;}
+    .cat-row{grid-template-columns:96px 1fr 30px;gap:10px;font-size:13px;}
+    .res-title,.form-title{font-size:23px;}
   }
 
-  /* Intro */
-  #view-intro h1{
-    font-family: var(--serif);
-    font-weight: 700;
-    font-size: 34px;
-    line-height: 1.35;
-    margin: 0 0 18px;
-  }
-  #view-intro p{
-    color: var(--ink-dim);
-    font-size: 18px;
-    line-height: 1.55;
-    max-width: 54ch;
-  }
-  .facts{
-    display:flex;
-    gap: 28px;
-    margin: 32px 0 40px;
-    flex-wrap: wrap;
-  }
-  .facts div{ font-size: 13px; color: var(--ink-dim); }
-  .facts strong{
-    display:block;
-    font-family: var(--serif);
-    font-size: 22px;
-    color: var(--ink);
-    font-weight: 500;
-  }
-
-  button.primary{
-    appearance:none;
-    border:none;
-    background: var(--green);
-    color: #0A150F;
-    font-family: var(--sans);
-    font-weight: 700;
-    font-size: 15.5px;
-    padding: 15px 28px;
-    cursor:pointer;
-    border-radius: 2px;
-  }
-  button.primary:hover{ background:#04dd66; }
-  button.primary:focus-visible{ outline: 2px solid var(--ink); outline-offset: 3px; }
-  button.ghost{
-    appearance:none;
-    background:none;
-    border:1px solid var(--line);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 14px;
-    padding: 12px 22px;
-    cursor:pointer;
-    border-radius: 2px;
-  }
-  button.ghost:hover{ border-color: var(--ink-dim); }
-
-  .btn-link{
-    display: inline-block;
-    font-family: var(--sans);
-    font-size: 15px;
-    text-decoration: none;
-    padding: 14px 26px;
-    border-radius: 2px;
-    cursor: pointer;
-  }
-  .btn-link.primary{ background: var(--green); color: #0A150F; font-weight: 700; }
-  .btn-link.primary:hover{ background: #04dd66; }
-  .btn-link.ghost{ border: 1px solid var(--line); color: var(--ink); }
-  .btn-link.ghost:hover{ border-color: var(--ink-dim); }
-  .btn-link:focus-visible{ outline: 2px solid var(--ink); outline-offset: 3px; }
-
-  /* Question view */
-  .view{ display:none; }
-  .view.active{ display:block; }
-
-  .q-index{
-    font-size: 12.5px;
-    color: var(--ink-dim);
-    margin-bottom: 10px;
-  }
-  .q-category{
-    font-size: 12.5px;
-    color: var(--green);
-    margin-bottom: 6px;
-    font-weight: 700;
-  }
-  .q-text{
-    font-family: var(--serif);
-    font-size: 23px;
-    line-height: 1.5;
-    font-weight: 500;
-    margin: 0 0 28px;
-  }
-  .options{
-    display:flex;
-    flex-direction:column;
-    gap: 10px;
-    margin-bottom: 36px;
-  }
-  .option{
-    text-align:left;
-    border: 1px solid var(--line);
-    background: var(--bg-panel);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 14.5px;
-    padding: 16px 18px;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: border-color 0.15s ease, background 0.15s ease;
-  }
-  .option:hover{ border-color: var(--ink-dim); }
-  .option:focus-visible{ outline: 2px solid var(--green); outline-offset: 2px; }
-  .option.selected{
-    border-color: var(--green);
-    background: rgba(3,199,90,0.10);
-  }
-  .nav-row{
-    display:flex;
-    justify-content: space-between;
-    align-items:center;
-  }
-
-  /* Results */
-  #view-result h1{
-    font-family: var(--serif);
-    font-size: 26px;
-    font-weight: 700;
-    margin: 0 0 4px;
-  }
-  #view-contact h1{
-    font-family: var(--serif);
-    font-size: 26px;
-    font-weight: 700;
-    margin: 0 0 32px;
-  }
-  .score-block{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px 0 32px;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 8px;
-  }
-  .score-wrap{
-    position: relative;
-    width: 188px;
-    height: 188px;
-    margin: 4px 0 18px;
-  }
-  .donut{
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-  }
-  .donut-track{
-    fill: none;
-    stroke: var(--line);
-    stroke-width: 14;
-  }
-  .donut-fill{
-    fill: none;
-    stroke-width: 14;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease;
-  }
-  .donut-center{
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .score-num{
-    font-family: var(--serif);
-    font-size: 46px;
-    line-height: 1;
-    font-weight: 700;
-  }
-  .score-suffix{ font-size: 13px; color: var(--ink-dim); margin-top: 4px; }
-  .score-tag{
-    font-size: 14px;
-    padding: 6px 16px;
-    border-radius: 2px;
-    font-weight: 700;
-    display: inline-block;
-  }
-  .tag-danger{ background: rgba(216,48,42,0.16); color: var(--red); }
-  .tag-caution{ background: rgba(232,129,58,0.16); color: var(--orange); }
-  .tag-good{ background: rgba(240,210,59,0.18); color: var(--yellow); }
-  .tag-excellent{ background: rgba(3,199,90,0.15); color: var(--green); }
-
-  .score-desc{ color: var(--ink-dim); font-size: 14.5px; margin: 18px auto 36px; text-align:center; max-width: 46ch; }
-
-  .breakdown-title{
-    font-size: 12.5px;
-    color: var(--ink-dim);
-    margin-bottom: 14px;
-    padding-top: 4px;
-  }
-  .cat-row{
-    display:grid;
-    grid-template-columns: 130px 1fr 34px;
-    align-items:center;
-    gap: 14px;
-    padding: 11px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 13.5px;
-  }
-  .cat-row .cat-name{ color: var(--ink); }
-  .cat-bar-track{ height: 6px; background: var(--line); position:relative; border-radius:2px; overflow:hidden; }
-  .cat-bar-fill{ position:absolute; left:0; top:0; height:100%; border-radius:2px; }
-  .cat-score{ text-align:right; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
-
-  .weak-section{ margin-top: 44px; }
-  .weak-section h2{
-    font-family: var(--serif);
-    font-size: 19px;
-    font-weight: 700;
-    margin: 0 0 6px;
-  }
-  .weak-section > p{ color: var(--ink-dim); font-size: 14px; margin: 0 0 20px; }
-  .weak-item{
-    border-left: 2px solid var(--red);
-    padding: 4px 0 4px 16px;
-    margin-bottom: 20px;
-  }
-  .weak-item .name{ font-weight: 700; font-size: 14.5px; margin-bottom: 4px; }
-  .weak-item .desc{ color: var(--ink-dim); font-size: 13.5px; }
-
-  .cta{
-    margin-top: 48px;
-    padding: 30px;
-    background: var(--bg-panel);
-    border: 1px solid var(--line);
-    border-radius: 3px;
-  }
-  .cta h2{
-    font-family: var(--serif);
-    font-size: 20px;
-    margin: 0 0 10px;
-    font-weight: 500;
-  }
-  .cta p{ color: var(--ink-dim); font-size: 14px; margin: 0 0 22px; }
-  .cta-actions{ display:flex; gap: 10px; flex-wrap: wrap; }
-
-  .contact-fallback{
-    margin-top: 18px;
-    padding-top: 16px;
-    border-top: 1px solid var(--line);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .contact-row{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13.5px;
-  }
-  .contact-label{
-    color: var(--ink-dim);
-    width: 40px;
-    flex-shrink: 0;
-  }
-  .contact-value{
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-    flex: 1;
-  }
-  .copy-btn{
-    appearance: none;
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--ink-dim);
-    font-family: var(--sans);
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 2px;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  .copy-btn:hover{ border-color: var(--ink-dim); color: var(--ink); }
-  .copy-btn.copied{ border-color: var(--green); color: var(--green); }
-
-  .restart-row{ margin-top: 28px; text-align:center; }
-  .restart-row a{ color: var(--ink-dim); font-size: 13px; cursor:pointer; text-decoration: underline; }
-
-  /* Contact form */
-  .form-eyebrow{
-    font-size: 12.5px;
-    color: var(--green);
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .form-intro{ color: var(--ink-dim); font-size: 14.5px; margin: 0 0 32px; }
-  .form-grid{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px 24px;
-    margin-bottom: 8px;
-  }
-  .field-full{ grid-column: 1 / -1; }
-  @media (max-width: 560px){
-    .form-grid{ grid-template-columns: 1fr; }
-  }
-  .field label{
-    display: block;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 8px;
-  }
-  .field input, .field textarea, .field select{
-    width: 100%;
-    background: var(--bg-panel);
-    border: 1px solid var(--line);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 14.5px;
-    padding: 12px 14px;
-    border-radius: 2px;
-    resize: vertical;
-  }
-  .field select{
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23AEC2B7' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 36px;
-  }
-  .field input::placeholder, .field textarea::placeholder{ color: var(--ink-dim); opacity: 0.7; }
-  .field input:focus, .field textarea:focus, .field select:focus{
-    outline: none;
-    border-color: var(--green);
-  }
-  .form-error{
-    color: var(--red);
-    font-size: 13.5px;
-    margin: 0 0 16px;
-  }
-  .thanks-wrap{
-    text-align: center;
-    padding: 60px 0 40px;
-  }
-  .thanks-icon{
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(3,199,90,0.15);
-    color: var(--green);
-    font-size: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-  }
-  .thanks-wrap h1{
-    font-family: var(--serif);
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0 0 10px;
-  }
-  .thanks-desc{ color: var(--ink-dim); font-size: 14.5px; }
-  .checkbox-group{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 20px;
-    margin-top: 6px;
-  }
-  .checkbox-item{
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .checkbox-item input[type="checkbox"]{
-    width: 16px;
-    height: 16px;
-    accent-color: var(--green);
-    cursor: pointer;
-  }
-
-  /* On desktop, click-to-call / mail-app buttons don't make sense: hide them,
-     keep the plain-text contact info (with copy) as the desktop path. */
-  @media (min-width: 641px){
-    .cta-actions{ display: none; }
-  }
-  .desktop-cta{ display: none; }
-  @media (min-width: 641px){
-    .desktop-cta{ display: inline-block; margin-top: 18px; }
-  }
-  /* Small phones: shrink oversized headline/number/label elements that
-     don't scale down automatically with the fluid container. */
-  @media (max-width: 420px){
-    #view-intro h1{ font-size: 26px; }
-    .q-text{ font-size: 19px; }
-    .score-wrap{ width: 150px; height: 150px; }
-    .score-num{ font-size: 34px; }
-    .cat-row{
-      grid-template-columns: 92px 1fr 28px;
-      gap: 10px;
-      font-size: 12.5px;
-    }
-    .masthead .mark{ font-size: 13px; }
-    .masthead .meta{ font-size: 11px; }
-    .facts{ gap: 18px; }
-    .facts strong{ font-size: 19px; }
-  }
+  /* PC 화면(641px 이상)에서는 전화 걸기 버튼 대신 복사 + 문의하기 버튼 */
+  @media (min-width:641px){.cta-actions{display:none;}}
+  .desktop-cta{display:none;}
+  @media (min-width:641px){.desktop-cta{display:inline-flex;margin-top:6px;align-self:flex-start;}}
 </style>
 </head>
 <body>
-<div class="sheet">
-
-  <div class="masthead">
-    <span class="mark">계정 자가진단</span>
-    <span class="meta">네이버 광고 · 소요시간 약 2분</span>
+<div class="topbar"><div class="tb"><span>🏆 김재연 주임에게 1:1 맞춤 광고 상담을 받아보세요! 지금 바로 문의하세요.</span><a onclick="openContactForm()" role="button" tabindex="0">광고 문의하기 ›</a></div></div>
+<header class="gnb">
+  <div class="wrap">
+    <a class="logo" href="https://miraeinc-ma3.github.io/kimjaeyeon/"><b>MIRAE <i>I&amp;C</i></b><span>미래아이엔씨 마케터</span></a>
+    <nav aria-label="주요 메뉴"><a href="https://miraeinc-ma3.github.io/kimjaeyeon/">← 마케터 소개</a><a href="https://www.toup.net/" target="_blank" rel="noopener">공식 홈페이지 ↗</a></nav>
   </div>
+</header>
+
+<main class="block soft">
+<div class="wrap">
+<div class="sheet" id="sheet">
 
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 
   <!-- INTRO -->
   <div class="view active" id="view-intro">
-    <h1>우리 네이버 광고, 지금 몇 점일까요?</h1>
-    <p>10개 질문에 답하면 계정 관리 상태를 점수로 바로 확인할 수 있어요. 무엇이 문제이고 무엇을 놓치고 있는지 지금 확인해보세요.</p>
+    <p class="kicker"><b>Self Check</b><span>네이버 광고 · 소요시간 약 2분</span></p>
+    <h1 class="title">우리 네이버 광고,<br><em>지금 몇 점</em>일까요?</h1>
+    <p class="desc">10개 질문에 답하면 계정 관리 상태를 점수로 바로 확인할 수 있어요. 무엇이 문제이고 무엇을 놓치고 있는지 지금 확인해보세요.</p>
     <div class="facts">
-      <div><strong>10문항</strong>핵심 점검 영역</div>
-      <div><strong>2분</strong>예상 소요시간</div>
-      <div><strong>즉시</strong>결과 확인</div>
+      <div class="fact"><strong>10문항</strong>핵심 점검 영역</div>
+      <div class="fact"><strong>2분</strong>예상 소요시간</div>
+      <div class="fact"><strong>즉시</strong>결과 확인</div>
     </div>
-    <button class="primary" onclick="startQuiz()">진단 시작하기</button>
+    <button class="btn btn-primary" onclick="startQuiz()">진단 시작하기</button>
   </div>
 
   <!-- QUESTION -->
   <div class="view" id="view-question">
-    <div class="q-index" id="qIndex">질문 1 / 10</div>
-    <div class="q-category" id="qCategory"></div>
-    <div class="q-text" id="qText"></div>
-    <div class="options" id="qOptions"></div>
-    <div class="nav-row">
-      <button class="ghost" id="prevBtn" onclick="prevQuestion()">이전</button>
-      <button class="ghost" id="skipHint" style="visibility:hidden;">답변을 선택해주세요</button>
+    <div class="card">
+      <div class="q-top"><span class="q-index" id="qIndex">질문 1 / 10</span><span class="q-category" id="qCategory"></span></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="qOptions"></div>
+      <div class="nav-row">
+        <button class="btn btn-ghost btn-sm" id="prevBtn" onclick="prevQuestion()">이전</button>
+      </div>
     </div>
   </div>
 
   <!-- RESULT -->
   <div class="view" id="view-result">
-    <h1>진단 결과</h1>
-    <div class="score-block">
-      <div class="score-wrap">
-        <svg class="donut" viewBox="0 0 188 188">
-          <circle class="donut-track" cx="94" cy="94" r="80"></circle>
-          <circle class="donut-fill" id="donutFill" cx="94" cy="94" r="80"></circle>
-        </svg>
-        <div class="donut-center">
-          <span class="score-num" id="scoreNum">0</span>
-          <span class="score-suffix">/ 100</span>
+    <h1 class="res-title">진단 결과</h1>
+    <div class="card">
+      <div class="score-block">
+        <div class="score-wrap">
+          <svg class="donut" viewBox="0 0 188 188">
+            <circle class="donut-track" cx="94" cy="94" r="80"></circle>
+            <circle class="donut-fill" id="donutFill" cx="94" cy="94" r="80"></circle>
+          </svg>
+          <div class="donut-center">
+            <span class="score-num" id="scoreNum">0</span>
+            <span class="score-suffix">/ 100</span>
+          </div>
         </div>
+        <div class="score-tag" id="scoreTag">-</div>
       </div>
-      <div class="score-tag" id="scoreTag">-</div>
+      <p class="score-desc" id="scoreDesc"></p>
     </div>
-    <p class="score-desc" id="scoreDesc"></p>
 
-    <div class="breakdown-title">영역별 점수</div>
-    <div id="catBreakdown"></div>
+    <div class="card">
+      <h2>영역별 점수</h2>
+      <div id="catBreakdown"></div>
+    </div>
 
-    <div class="weak-section" id="weakSection">
+    <div class="card" id="weakSection">
       <h2>지금 개선이 필요한 부분</h2>
-      <p>아래 항목은 이번 진단에서 낮게 나온 영역입니다. 그대로 두면 성과에 영향을 줄 수 있어요.</p>
+      <p class="sub">아래 항목은 이번 진단에서 낮게 나온 영역입니다. 그대로 두면 성과에 영향을 줄 수 있어요.</p>
       <div id="weakList"></div>
     </div>
 
-    <div class="cta">
+    <div class="card cta">
       <h2>정확한 진단은 실제 계정 데이터로 확인해드립니다</h2>
-      <p>운영조회 권한(로그인 정보 불필요, 열람 전용)만 주시면 실제 데이터를 기반으로 위 항목들에 대한 상세 개선방안을 무료로 알려드립니다.</p>
+      <p>운영조회 권한(비밀번호 등 어떠한 정보도 요청하지 않는 열람 전용 권한)만 주시면 실제 데이터를 기반으로 위 항목들에 대한 상세 개선방안을 무료로 알려드립니다.</p>
+      <p class="cta-scarcity">퀄리티 있는 진단을 위해, 상담은 주당 선착순 3팀까지만 진행합니다.</p>
       <div class="cta-actions">
-        <button class="btn-link primary" style="border:none;font-family:inherit;cursor:pointer;" onclick="openContactForm()">이메일로 상담 신청</button>
-        <a class="btn-link ghost" href="tel:01032414127">전화로 문의하기</a>
+        <button class="btn btn-primary" onclick="openContactForm()">이메일로 상담 신청</button>
+        <a class="btn btn-ghost" href="tel:01032414127">전화로 문의하기</a>
       </div>
       <div class="contact-fallback">
         <div class="contact-row">
@@ -574,7 +273,7 @@
           <span class="contact-value" id="phoneValue">010-3241-4127</span>
           <button class="copy-btn" onclick="copyContact('phoneValue', this)">복사</button>
         </div>
-        <button class="btn-link primary desktop-cta" style="border:none;font-family:inherit;cursor:pointer;" onclick="openContactForm()">문의하기</button>
+        <button class="btn btn-primary btn-sm desktop-cta" onclick="openContactForm()">문의하기</button>
       </div>
     </div>
 
@@ -583,33 +282,14 @@
 
   <!-- CONTACT FORM -->
   <div class="view" id="view-contact">
-    <div class="form-eyebrow">네이버 광고 상담</div>
-    <h1>광고 계정 상담 신청</h1>
-    <form id="contactForm" onsubmit="submitContactForm(event)">
-      <div class="form-grid">
-        <div class="field">
-          <label for="fldName">성함 / 업체명 *</label>
-          <input type="text" id="fldName" placeholder="성함 또는 업체명" required>
-        </div>
-        <div class="field">
-          <label for="fldContact">연락처 *</label>
-          <input type="text" id="fldContact" placeholder="010-0000-0000" required>
-        </div>
-        <div class="field">
-          <label for="fldEmail">이메일</label>
-          <input type="email" id="fldEmail" placeholder="선택 입력">
-        </div>
-        <div class="field">
-          <label for="fldStatus">현재 광고 운영 형태</label>
-          <select id="fldStatus">
-            <option value="">선택하지 않음</option>
-            <option value="직접 운영 중">직접 운영 중</option>
-            <option value="대행사 이용 중">대행사 이용 중</option>
-            <option value="아직 시작 전">아직 시작 전</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="fldBudget">월 광고비 규모</label>
+    <div class="card">
+      <p class="kicker"><b>Contact</b><span>네이버 광고 상담</span></p>
+      <h1 class="form-title">광고 계정 상담 신청</h1>
+      <form id="contactForm" onsubmit="submitContactForm(event)">
+        <div class="frow"><label for="fldName">성함 / 업체명<i>*</i></label><input type="text" id="fldName" placeholder="성함 또는 업체명" required></div>
+        <div class="frow"><label for="fldContact">연락처<i>*</i></label><input type="text" id="fldContact" placeholder="010-0000-0000" required></div>
+        <div class="frow"><label for="fldEmail">이메일</label><input type="email" id="fldEmail" placeholder="선택 입력"></div>
+        <div class="frow"><label for="fldBudget">월 광고비 규모</label>
           <select id="fldBudget">
             <option value="">선택하지 않음</option>
             <option value="100만원 미만">100만원 미만</option>
@@ -618,51 +298,42 @@
             <option value="500만원 이상">500만원 이상</option>
           </select>
         </div>
-        <div class="field">
-          <label for="fldTime">상담 희망 시간</label>
-          <select id="fldTime">
-            <option value="언제든 가능">언제든 가능</option>
-            <option value="오전">오전</option>
-            <option value="오후">오후</option>
-            <option value="저녁">저녁</option>
-          </select>
+        <div class="frow top"><label for="fldMessage">문의 내용</label><textarea id="fldMessage" rows="4" placeholder="궁금한 점이나 지금 상황을 간단히 적어주세요"></textarea></div>
+        <label class="agree"><input type="checkbox" id="fldConsent" required> [필수] 개인정보 수집·이용에 동의합니다</label>
+        <p class="consent-detail">수집 항목: 성함/업체명, 연락처, 이메일, 문의내용 · 수집 목적: 상담 신청 접수 및 연락 · 보유 기간: 상담 완료 후 6개월 보관 후 파기 · 동의를 거부할 권리가 있으며, 동의하지 않을 경우 상담 신청이 제한될 수 있습니다.</p>
+        <p class="form-error" id="contactFormError" style="display:none;"></p>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" onclick="backFromContact()">이전으로</button>
+          <button type="submit" class="btn btn-primary" id="contactSubmitBtn">상담 신청 보내기</button>
         </div>
-        <div class="field field-full">
-          <label>진행중인 온라인 광고</label>
-          <div class="checkbox-group">
-            <label class="checkbox-item"><input type="checkbox" value="네이버" class="ad-platform">네이버</label>
-            <label class="checkbox-item"><input type="checkbox" value="메타" class="ad-platform">메타</label>
-            <label class="checkbox-item"><input type="checkbox" value="구글" class="ad-platform">구글</label>
-            <label class="checkbox-item"><input type="checkbox" value="기타" class="ad-platform">기타</label>
-          </div>
-        </div>
-        <div class="field field-full">
-          <label for="fldUrl">광고 진행 중인 홈페이지 URL</label>
-          <input type="url" id="fldUrl" placeholder="https://example.com">
-        </div>
-        <div class="field field-full">
-          <label for="fldMessage">문의 내용</label>
-          <textarea id="fldMessage" rows="4" placeholder="궁금한 점이나 지금 상황을 간단히 적어주세요"></textarea>
-        </div>
-      </div>
-      <p class="form-error" id="contactFormError" style="display:none;"></p>
-      <div class="nav-row">
-        <button type="button" class="ghost" onclick="showView('view-result')">이전으로</button>
-        <button type="submit" class="primary" id="contactSubmitBtn">상담 신청 보내기</button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 
   <!-- THANK YOU -->
   <div class="view" id="view-thanks">
-    <div class="thanks-wrap">
-      <div class="thanks-icon">✓</div>
-      <h1>접수되었습니다</h1>
-      <p class="thanks-desc">남겨주신 내용 확인 후 빠르게 연락드리겠습니다.</p>
+    <div class="card">
+      <div class="thanks-wrap">
+        <div class="thanks-icon">✓</div>
+        <h1>접수되었습니다</h1>
+        <p class="thanks-desc">남겨주신 내용 확인 후 빠르게 연락드리겠습니다.</p>
+        <a class="btn btn-ghost btn-sm" href="https://miraeinc-ma3.github.io/kimjaeyeon/">마케터 소개로 돌아가기</a>
+      </div>
     </div>
   </div>
 
 </div>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <b>MIRAE I&amp;C</b>
+    <p>(주)미래아이엔씨 · 네이버 공식 프리미어 파트너사</p>
+    <p>서울 본사 : 서울시 금천구 가산디지털2로 144 현대테라타워 가산DK 13층 · 02-6233-4700</p>
+    <p>공식 홈페이지 <a href="https://www.toup.net/" target="_blank" rel="noopener">www.toup.net</a> · © MIRAE I&amp;C. All rights reserved.</p>
+  </div>
+</footer>
 
 <script>
 const QUESTIONS = [
@@ -712,18 +383,18 @@ const QUESTIONS = [
   },
   {
     category: "키워드 관리",
-    text: "제외 키워드나 검색 범위 설정을 관리해서 불필요한 노출을 줄이고 있나요?",
+    text: "제외 검색어나 검색 범위 설정을 관리해서 불필요한 노출을 줄이고 있나요?",
     options: [
       { label: "그런 설정을 해본 적이 없다", score: 0 },
       { label: "처음에만 설정하고 그대로 두었다", score: 1 },
       { label: "가끔 검색어를 확인해서 제외한다", score: 2 },
       { label: "정기적으로 검색어를 점검하고 관리한다", score: 3 },
     ],
-    weakNote: "제외 키워드 관리가 없으면 관련 없는 검색에도 비용이 계속 소진됩니다."
+    weakNote: "제외 검색어 관리가 없으면 관련 없는 검색에도 비용이 계속 소진됩니다."
   },
   {
     category: "소재 관리",
-    text: "광고 문구, 이미지, 서브링크 같은 확장소재를 얼마나 자주 교체·보강하나요?",
+    text: "광고 소재 및 확장소재(이미지, 서브링크 등)를 얼마나 자주 교체·보강하나요?",
     options: [
       { label: "처음 만든 그대로 쓰고 있다", score: 0 },
       { label: "생각날 때 한 번씩 바꾼다", score: 1 },
@@ -787,6 +458,9 @@ let lastWeakCategories = [];
 function showView(id){
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  // 화면이 바뀌면 진단 영역 맨 위로 이동 (결과·신청 화면이 길어서)
+  const top = document.getElementById('sheet');
+  if(top && top.getBoundingClientRect().top < 0) top.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function startQuiz(){
@@ -941,18 +615,14 @@ function openContactForm(){
   showView('view-contact');
 }
 
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xbgjqqrr';
+const FORMSPREE_ENDPOINT = 'https://formsubmit.co/ajax/wodus0117@toup.net';
 
 async function submitContactForm(e){
   e.preventDefault();
   const name = document.getElementById('fldName').value.trim();
   const contact = document.getElementById('fldContact').value.trim();
   const email = document.getElementById('fldEmail').value.trim();
-  const status = document.getElementById('fldStatus').value;
   const budget = document.getElementById('fldBudget').value;
-  const time = document.getElementById('fldTime').value;
-  const platforms = Array.from(document.querySelectorAll('.ad-platform:checked')).map(cb => cb.value).join(', ');
-  const url = document.getElementById('fldUrl').value.trim();
   const message = document.getElementById('fldMessage').value.trim();
 
   const scoreLine = lastPct !== null ? `${lastPct}/100 (${lastBandLabel})` : '자가진단 미완료';
@@ -966,15 +636,12 @@ async function submitContactForm(e){
   submitBtn.textContent = '보내는 중...';
 
   const payload = {
-    _subject: '상담신청',
+    _template: 'table', _captcha: 'false', _subject: '[광고 자가진단] 상담신청',
     성함_업체명: name,
     연락처: contact,
     이메일: email || '(작성 안 함)',
-    현재_광고_운영_형태: status || '(선택 안 함)',
     월_광고비_규모: budget || '(선택 안 함)',
-    상담_희망_시간: time,
-    진행중인_온라인_광고: platforms || '(선택 안 함)',
-    홈페이지_URL: url || '(작성 안 함)',
+    개인정보_수집이용_동의: '동의함',
     자가진단_점수: scoreLine,
     개선_필요_영역: weakLine,
     문의_내용: message || '(작성 안 함)',
@@ -986,7 +653,7 @@ async function submitContactForm(e){
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if(!res.ok) throw new Error('submit failed');
+    const _j = await res.json().catch(function(){return {};}); if(!res.ok || String(_j.success)!=='true') throw new Error('submit failed');
     showView('view-thanks');
   } catch(err){
     errorEl.textContent = '전송 중 문제가 발생했습니다. 잠시 후 다시 시도해주시거나, 위에 안내된 전화번호로 연락해주세요.';
@@ -1003,6 +670,10 @@ function restartQuiz(){
   document.getElementById('progressFill').style.width = '0%';
   showView('view-intro');
 }
+
+function backFromContact(){ showView(lastPct !== null ? 'view-result' : 'view-intro'); }
 </script>
+<script data-goatcounter="https://wodus0117.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업종별 광고 성과 분석 | 미래아이엔씨</title>
+<meta name="description" content="업종과 월 광고비만 입력하면 우리 광고의 적정 성과(CTR·CVR·ROAS)를 바로 확인할 수 있습니다. 미래아이엔씨 김재연 주임.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --brand:#4458e2; --brand-2:#5a6cf0; --brand-dark:#3343c4;
+    --tint-1:#f4f6ff; --tint-2:#eef0fd; --tint-3:#dfe4fc; --tint-4:#c9d0fb; --tint-5:#9aa6f5;
+    --ink:#171d3a; --muted:#5b6483; --line:#dfe4fc; --bg:#fff;
+    --red:#d8302a; --blue:#2f5cf0; --green:#0f8a5a; --amber:#f2a31b;
+    --radius:16px;
+    --grad:linear-gradient(135deg,#5a6cf0,#3343c4);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;word-break:keep-all;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+  /* topbar + gnb (본 사이트와 동일한 구성) */
+  .topbar{background:var(--grad);color:#fff;font-size:13px;}
+  .topbar .tb{max-width:1040px;margin:0 auto;padding:9px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .topbar a{font-weight:700;white-space:nowrap;}
+  .gnb{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+  .gnb .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;}
+  .logo{display:flex;align-items:baseline;gap:10px;}
+  .logo b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.2px;}
+  .logo b i{font-style:normal;color:var(--brand);}
+  .logo span{font-size:13px;color:var(--muted);}
+  .gnb nav{display:flex;gap:18px;font-size:14px;font-weight:600;}
+  .gnb nav a{color:var(--muted);}
+  .gnb nav a:hover{color:var(--brand);}
+  @media (max-width:560px){.logo span{display:none;} .topbar .tb span{font-size:12px;}}
+
+  /* section */
+  .block{padding:56px 0;}
+  .block.soft{background:var(--tint-1);}
+  .kicker{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:14px;}
+  .kicker b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:800;color:var(--brand);background:var(--tint-2);padding:4px 12px;border-radius:999px;font-size:13px;}
+  .kicker span{color:var(--muted);font-weight:500;}
+  h1.title,h2.title{font-size:34px;line-height:1.35;font-weight:800;letter-spacing:-.8px;margin:0 0 12px;}
+  h1.title em,h2.title em{font-style:normal;color:var(--brand);}
+  .desc{color:var(--muted);font-size:16px;margin:0 0 28px;max-width:640px;}
+  @media (max-width:560px){h1.title,h2.title{font-size:26px;} .block{padding:40px 0;}}
+
+  /* card + form controls */
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 6px 24px rgba(51,67,196,.06);}
+  .card h3{font-size:18px;font-weight:800;margin:0 0 4px;letter-spacing:-.3px;}
+  .card .sub{color:var(--muted);font-size:14px;margin:0 0 18px;}
+  label.field-label{display:block;font-size:14px;font-weight:700;margin-bottom:8px;}
+  .field-group{margin-bottom:18px;}
+  select,input[type="text"],input[type="number"],input[type="email"],input[type="tel"],textarea,.fi{
+    width:100%;background:#fff;border:1px solid var(--tint-4);color:var(--ink);font-family:inherit;font-size:15px;padding:13px 14px;border-radius:10px;outline:none;transition:border-color .15s,box-shadow .15s;}
+  select:focus,input:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(68,88,226,.15);}
+  select:disabled{background:var(--tint-1);color:#9aa1bb;cursor:not-allowed;}
+  textarea{resize:vertical;min-height:96px;}
+  .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media (max-width:680px){.row-3{grid-template-columns:1fr;}}
+  .input-suffix{position:relative;}
+  .input-suffix span{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none;}
+  .input-suffix input{padding-right:40px;}
+  .hint{font-size:13px;color:var(--brand);margin-top:6px;min-height:20px;font-weight:600;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:15px 26px;border-radius:12px;border:none;font-size:16px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s;}
+  .btn-primary{background:var(--grad);color:#fff;}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(51,67,196,.28);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-block{width:100%;}
+
+  /* results */
+  #results{display:none;margin-top:30px;}
+  #results.show{display:block;animation:fadeIn .35s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  #results.stale > *{opacity:.4;pointer-events:none;transition:opacity .2s;}
+  .result-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start;}
+  @media (max-width:860px){.result-grid{grid-template-columns:1fr;}}
+  .disclaimer{background:var(--tint-1);border:1px dashed var(--tint-4);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .chart-hint{font-size:14px;color:var(--muted);margin:0 0 20px;}
+  .chart-hint b{color:var(--brand);font-weight:800;}
+
+  .gauges{display:flex;flex-direction:column;gap:22px;margin-top:6px;}
+  .g-row{border-top:1px solid var(--tint-3);padding-top:16px;}
+  .g-row:first-child{border-top:none;padding-top:0;}
+  .g-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+  .g-name{font-size:15px;font-weight:800;}
+  .g-sum{font-size:12.5px;color:var(--muted);}
+  .g-body{display:grid;grid-template-columns:1fr 112px;gap:16px;align-items:end;}
+  @media (max-width:560px){.g-body{grid-template-columns:1fr;gap:8px;}}
+  .g-plot{position:relative;height:96px;}
+  .g-line{position:absolute;left:0;right:0;top:46px;height:2px;background:var(--tint-3);border-radius:2px;}
+  .g-band{position:absolute;top:33px;height:28px;border-radius:8px;background:#e3e7fb;border:1px solid #c3cbf7;transition:left .7s cubic-bezier(.22,.9,.3,1),width .7s cubic-bezier(.22,.9,.3,1);overflow:hidden;}
+  .g-band span{position:absolute;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:#6a74a8;white-space:nowrap;}
+  .g-band .lo{left:7px;} .g-band .hi{right:7px;}
+  .g-med{position:absolute;top:24px;height:46px;width:0;border-left:2px dashed #171d3a;transition:left .7s cubic-bezier(.22,.9,.3,1);}
+  .g-med em{position:absolute;top:-20px;left:0;transform:translateX(-50%);font-style:normal;font-size:12px;font-weight:800;color:#171d3a;white-space:nowrap;}
+  .g-dot{z-index:2;position:absolute;top:37px;width:20px;height:20px;margin-left:-10px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(23,29,58,.35);opacity:0;transition:left .5s cubic-bezier(.22,.9,.3,1),opacity .2s,background .2s;}
+  .g-dot.on{opacity:1;}
+  .g-dot.up{background:var(--blue);} .g-dot.dn{background:var(--red);} .g-dot.eq{background:var(--green);}
+  .g-me{position:absolute;top:68px;transform:translateX(-50%);font-size:12px;font-weight:800;white-space:nowrap;opacity:0;transition:left .5s cubic-bezier(.22,.9,.3,1),opacity .2s;}
+  .g-me.on{opacity:1;}
+  .g-me.up{color:var(--blue);} .g-me.dn{color:var(--red);} .g-me.eq{color:var(--green);}
+  .myin label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:5px;}
+  .myin input{padding:11px 10px;font-size:15px;text-align:center;}
+  .status-pill{display:none;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;margin-top:8px;text-align:center;line-height:1.35;}
+  .status-pill.on{display:inline-block;}
+  .status-up{background:#e6ecff;color:var(--blue);}
+  .status-eq{background:#e3f6ec;color:var(--green);}
+  .status-down{background:#fdeceb;color:var(--red);}
+  .legend{display:flex;gap:16px;margin-top:16px;font-size:12.5px;color:var(--muted);}
+  .legend{flex-wrap:wrap;}
+  .legend i{display:inline-block;margin-right:6px;vertical-align:-2px;}
+  .legend i.band{width:16px;height:10px;border-radius:3px;background:#e3e7fb;border:1px solid #c3cbf7;}
+  .legend i.med{width:0;height:12px;border-left:2px dashed #171d3a;margin-right:8px;}
+  .legend i.dot{width:11px;height:11px;border-radius:50%;margin-left:4px;margin-right:4px;}
+  .legend i.dot.up{background:var(--blue);} .legend i.dot.dn{background:var(--red);} .legend i.dot.eq{background:var(--green);}
+
+  .stats{display:grid;grid-template-columns:1fr;gap:12px;}
+  .stat{background:var(--tint-1);border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .stat span{font-size:14px;color:var(--muted);font-weight:600;}
+  .stat b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-size:26px;font-weight:800;color:var(--brand);letter-spacing:-.5px;}
+  .stat b small{font-family:'Pretendard',sans-serif;font-size:14px;font-weight:600;color:var(--muted);margin-left:3px;}
+  .note{font-size:12.5px;color:var(--muted);margin:14px 0 0;}
+
+  /* outcome cards (본 사이트의 Q 카드 스타일) */
+  .scarcity{text-align:center;color:var(--red);font-size:14px;font-weight:800;margin:34px 0 16px;}
+  .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:860px){.qgrid{grid-template-columns:1fr;}}
+  .q{position:relative;text-align:left;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;cursor:pointer;color:inherit;width:100%;display:flex;flex-direction:column;gap:10px;transition:border-color .15s,transform .15s,box-shadow .15s;}
+  .q:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 10px 24px rgba(51,67,196,.12);}
+  .q.recommended{border-color:var(--brand);background:linear-gradient(180deg,var(--tint-1),#fff);}
+  .q.selected{box-shadow:0 0 0 3px rgba(68,88,226,.25);border-color:var(--brand);}
+  .q .badge{width:34px;height:34px;border-radius:50%;background:var(--grad);color:#fff;font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  .q h4{margin:0;font-size:17px;font-weight:800;line-height:1.4;letter-spacing:-.3px;}
+  .q p{margin:0;color:var(--muted);font-size:14px;flex:1;}
+  .q .go{color:var(--brand);font-weight:800;font-size:14px;}
+  .rec-badge{display:none;position:absolute;top:-11px;right:16px;background:var(--brand);color:#fff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;}
+  .q.recommended .rec-badge{display:block;}
+
+  /* inquiry (마케터 페이지 문의 섹션과 동일한 구성) */
+  .inquiry{display:grid;grid-template-columns:39.4% 1fr;min-height:760px;}
+  @media (max-width:900px){.inquiry{grid-template-columns:1fr;min-height:0;}}
+  .iq-left{position:relative;overflow:hidden;background:#4459e3;color:#fff;padding:44px 24px 44px 64px;}
+  @media (max-width:900px){.iq-left{padding:40px 24px 120px;}}
+  .iq-left .kicker{display:flex;align-items:baseline;gap:12px;margin:0 0 26px;font-size:13px;flex-wrap:nowrap;}
+  @media (max-width:420px){.iq-left .kicker{flex-wrap:wrap;gap:4px 12px;}}
+  .iq-left .kicker b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:800;font-size:23px;color:#fff;background:none;padding:0;border-radius:0;letter-spacing:-.3px;}
+  .iq-left .kicker span{color:rgba(255,255,255,.85);font-weight:500;font-size:13px;}
+  .iq-left h2{font-size:49px;line-height:1.28;font-weight:800;letter-spacing:-1.5px;margin:0 0 26px;}
+  .iq-left h2 em{font-style:normal;color:#62e4f0;}
+  @media (max-width:900px){.iq-left h2{font-size:38px;}}
+  .iq-left .lead{color:rgba(255,255,255,.9);font-size:16px;line-height:1.7;margin:0 0 40px;}
+  .mgr{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:20px;padding:26px 28px;max-width:370px;}
+  .mgr strong{display:block;font-size:18px;font-weight:800;margin-bottom:6px;}
+  .mgr span{font-size:14px;color:rgba(255,255,255,.88);}
+  .mgr-lines{margin:26px 0 0;display:flex;flex-direction:column;gap:12px;}
+  .mgr-lines a{display:flex;align-items:baseline;gap:18px;font-size:16px;font-weight:600;}
+  .mgr-lines em{font-style:normal;width:48px;color:rgba(255,255,255,.7);font-weight:500;font-size:14px;}
+  .office{margin-top:44px;position:relative;z-index:1;}
+  .office strong{display:block;font-size:18px;font-weight:800;margin-bottom:8px;}
+  .office p{margin:0;font-size:14px;line-height:1.65;color:rgba(255,255,255,.9);}
+  .iq-wm{position:absolute;left:0;bottom:-70px;width:330px;height:220px;overflow:hidden;display:flex;justify-content:flex-end;font-family:'Plus Jakarta Sans','Pretendard',sans-serif;font-weight:800;font-size:210px;line-height:1;letter-spacing:-8px;color:rgba(255,255,255,.07);white-space:nowrap;pointer-events:none;user-select:none;}
+  @media (max-width:900px){.iq-wm{width:100%;}}
+  .iq-right{background:#fff;padding:42px 45px 56px 56px;}
+  @media (max-width:900px){.iq-right{padding:36px 24px 48px;}}
+  .frow{display:grid;grid-template-columns:124px 1fr;gap:0;align-items:center;margin-bottom:14px;}
+  .frow.top{align-items:start;}
+  .frow.top label{padding-top:14px;}
+  .frow label{font-size:14px;font-weight:700;color:#111;}
+  .frow label i{font-style:normal;color:var(--brand);margin-left:2px;}
+  .frow input,.frow select,.frow textarea{background:#f3f4f8;border:1px solid transparent;border-radius:10px;padding:0 16px;height:46px;font-size:15px;color:var(--ink);box-shadow:none;}
+  .frow textarea{height:150px;padding:14px 16px;line-height:1.6;resize:vertical;}
+  .frow select{padding-right:12px;cursor:pointer;}
+  .frow input::placeholder,.frow textarea::placeholder{color:#8b91a6;}
+  .frow input:focus,.frow select:focus,.frow textarea:focus{background:#fff;border-color:var(--brand);box-shadow:0 0 0 3px rgba(68,88,226,.14);}
+  @media (max-width:560px){.frow{grid-template-columns:1fr;gap:6px;}.frow.top label{padding-top:0;}}
+  .agree{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#444;margin:6px 0 24px 124px;cursor:pointer;flex-wrap:nowrap;white-space:nowrap;}
+  @media (max-width:900px){.agree{flex-wrap:wrap;white-space:normal;align-items:flex-start;}.agree span{flex:1;min-width:0;}.agree .more{flex-basis:100%;text-align:left;margin-left:24px;}}
+  @media (max-width:560px){.agree{margin-left:0;}}
+  .agree input{width:16px;height:16px;flex:none;accent-color:var(--brand);margin:0;}
+  .agree .more{background:none;border:none;padding:0;color:var(--muted);font-size:12.5px;text-decoration:underline;cursor:pointer;}
+  .consent-detail{display:none;font-size:12px;color:var(--muted);line-height:1.65;margin:-14px 0 20px 124px;}
+  .consent-detail.show{display:block;}
+  @media (max-width:560px){.consent-detail{margin-left:0;}}
+  #submitBtn{width:100%;border-radius:10px;background:var(--brand);padding:17px;}
+  #submitBtn:hover{background:var(--brand-dark);transform:none;box-shadow:none;}
+  .form-msg{display:none;margin:14px 0 0;font-size:14px;font-weight:700;text-align:center;}
+
+
+
+  /* 상담 유형 팝업 */
+  dialog.pop{border:none;border-radius:20px;padding:0;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 48px);box-shadow:0 24px 60px rgba(23,29,58,.35);color:var(--ink);}
+  dialog.pop::backdrop{background:rgba(23,29,58,.55);}
+  dialog.pop[open]{animation:popIn .22s ease;}
+  @keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
+  .pop-in{padding:30px 30px 26px;}
+  .pop-x{position:absolute;right:14px;top:12px;width:34px;height:34px;border:none;background:none;font-size:26px;line-height:1;color:var(--muted);cursor:pointer;border-radius:50%;}
+  .pop-x:hover{background:var(--tint-2);color:var(--ink);}
+  .pop-tag{display:inline-block;font-size:12px;font-weight:800;color:var(--brand);background:var(--tint-2);padding:4px 12px;border-radius:999px;margin-bottom:12px;}
+  .pop h3{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1.4;margin:0 0 8px;}
+  .pop .pop-lead{color:var(--muted);font-size:14.5px;margin:0 0 16px;}
+  .pop-list{border-top:1px solid var(--tint-3);}
+  .pop-item{padding:14px 0;border-bottom:1px solid var(--tint-3);}
+  .pop-item b{display:block;font-size:15px;margin-bottom:3px;}
+  .pop-item b.dn{color:var(--red);}
+  .pop-item p{margin:0;font-size:14px;color:var(--muted);}
+  .pop-note{font-size:12px;color:var(--muted);margin:12px 0 0;}
+  .pop-act{display:flex;gap:10px;margin-top:20px;}
+  .pop-act .btn{flex:1;padding:14px 16px;font-size:15px;}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--tint-4);flex:0 0 96px !important;}
+  .btn-ghost:hover{border-color:var(--brand);color:var(--brand);transform:none;box-shadow:none;}
+  .foot{background:#10152e;color:#aab1d1;padding:34px 0;font-size:13px;}
+  .foot b{font-family:'Plus Jakarta Sans','Pretendard',sans-serif;color:#fff;font-size:17px;}
+  .foot p{margin:4px 0;}
+  .foot a{color:#c9d0fb;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="tb"><span>🏆 김재연 주임에게 1:1 맞춤 광고 상담을 받아보세요! 지금 바로 문의하세요.</span><a href="#contact" data-type="">광고 문의하기 ›</a></div></div>
+<header class="gnb">
+  <div class="wrap">
+    <a class="logo" href="https://miraeinc-ma3.github.io/kimjaeyeon/"><b>MIRAE <i>I&amp;C</i></b><span>미래아이엔씨 마케터</span></a>
+    <nav aria-label="주요 메뉴"><a href="https://miraeinc-ma3.github.io/kimjaeyeon/">← 마케터 소개</a><a href="https://www.toup.net/" target="_blank" rel="noopener">공식 홈페이지 ↗</a></nav>
+  </div>
+</header>
+
+<section class="block soft">
+  <div class="wrap">
+    <p class="kicker"><b>Benchmark</b><span>Q. 우리 광고, 업종 평균과 비교하면 어느 정도일까요?</span></p>
+    <h1 class="title">우리 광고는<br><em>어느 정도 성과</em>가 적정일까요?</h1>
+    <p class="desc">업종과 월 광고비를 입력하고 분석하기를 누르면, 바로 아래에 적정 성과가 나타납니다.</p>
+
+    <!-- 입력 -->
+    <div class="card">
+      <div class="row-3">
+        <div class="field-group">
+          <label class="field-label" for="selMain">업종 대분류</label>
+          <select id="selMain"><option value="">선택해 주세요</option></select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="selSub">업종 중분류</label>
+          <select id="selSub" disabled><option value="">대분류를 먼저 선택해 주세요</option></select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="inputBudget">월 광고비</label>
+          <div class="input-suffix">
+            <input type="text" id="inputBudget" inputmode="numeric" autocomplete="off" placeholder="예: 3,000,000">
+            <span>원</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary btn-block" id="analyzeBtn" disabled>분석하기</button>
+      <div class="hint" id="staleHint" style="display:none;text-align:center;margin-top:10px;color:var(--red);">입력값이 바뀌었습니다. 다시 분석하기를 눌러 주세요.</div>
+    </div>
+
+    <!-- 결과 -->
+    <div id="results">
+      <div class="result-grid">
+        <div class="card">
+          <h3 id="benchTitle">업종 평균 성과</h3>
+          <p class="sub">같은 업종에서 일반적으로 나타나는 적정 성과입니다.</p>
+          <div class="disclaimer">※ 아래 수치는 공개된 업종별 광고 성과 자료 등을 참고하여 임의로 산정한 예상 데이터입니다. 정확한 조사를 기반으로 산출한 것이 아니므로, 실제 데이터와 다를 수 있습니다.</div>
+          <div class="chart-hint">내 광고 성과를 알고 계신가요? <b>내 성과를 입력하면</b> 바로 비교하실 수 있습니다. <span style="white-space:nowrap">(선택)</span></div>
+          <div class="gauges" id="gauges"></div>
+          <div class="legend">
+            <span><i class="band"></i>예상 범위</span>
+            <span><i class="med"></i>업종 평균</span>
+            <span>내 성과 <i class="dot dn"></i>평균 이하 <i class="dot eq"></i>평균과 동일 <i class="dot up"></i>평균 이상</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>입력하신 광고비 기준 예상 성과</h3>
+          <p class="sub">업종 평균 클릭 단가를 적용한 추정치입니다.</p>
+          <div class="stats">
+            <div class="stat"><span>예상 클릭 수</span><b id="estClicks"></b></div>
+            <div class="stat"><span>예상 전환 수</span><b id="estConv"></b></div>
+            <div class="stat"><span>예상 매출</span><b id="estRevenue"></b></div>
+          </div>
+          <p class="note">실제 결과와 다를 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="scarcity">퀄리티 있는 진단을 위해, 상담은 주당 선착순 3팀까지만 진행합니다.</div>
+
+      <div class="qgrid">
+        <button type="button" class="q" id="cardImprove" data-type="성과 개선 상담">
+          <span class="rec-badge">내 성과 기준 추천</span>
+          <div class="badge">A</div>
+          <h4>지금 광고,<br>더 끌어올리고 싶다면</h4>
+          <p>업종 평균보다 낮은 항목이 있다면, 원인을 짚어보고 개선할 수 있는 부분이 있습니다.</p>
+          <span class="go">자세히 보기 ›</span>
+        </button>
+        <button type="button" class="q" id="cardExpand" data-type="매체 확장 상담">
+          <span class="rec-badge">내 성과 기준 추천</span>
+          <div class="badge">B</div>
+          <h4>잘하고 있다면,<br>더 키워볼 타이밍</h4>
+          <p>업종 평균 이상이라면, 다른 매체(구글, 메타 등)로 확장해도 좋은 결과를 기대할 수 있습니다.</p>
+          <span class="go">자세히 보기 ›</span>
+        </button>
+        <button type="button" class="q" id="cardUnknown" data-type="성과 진단 상담">
+          <div class="badge">C</div>
+          <h4>내 성과가 어느 정도인지<br>잘 모르겠다면</h4>
+          <p>복잡하게 따지지 않아도 괜찮습니다. 계정을 직접 살펴보고 지금 상태를 정확히 짚어드립니다.</p>
+          <span class="go">자세히 보기 ›</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 문의 (본 사이트 문의 섹션과 같은 좌/우 구성) -->
+<section class="inquiry" id="contact">
+  <div class="iq-left">
+    <p class="kicker"><b>Inquiry</b><span>Q. 이제 성공적인 비즈니스를 함께 시작해 볼까요?</span></p>
+    <h2>지금,<br>미래아이엔씨와<br><em>다음 성장</em>을<br>시작하세요!</h2>
+    <p class="lead">현재 상황을 분석하고, 목표에 맞는<br>최적의 마케팅 전략을 제안해 드립니다.</p>
+    <div class="mgr"><strong>김재연 주임</strong><span>MA3 본부 · 네이버 광고 마케터</span></div>
+    <div class="mgr-lines">
+      <a href="tel:01032414127"><em>휴대폰</em>010-3241-4127</a>
+      <a href="tel:0262334744"><em>사무실</em>02-6233-4744</a>
+      <a href="mailto:wodus0117@toup.net"><em>이메일</em>wodus0117@toup.net</a>
+    </div>
+    <div class="office">
+      <strong>서울 본사</strong>
+      <p>서울시 금천구 가산디지털2로 144 현대테라타워 가산DK 13층<br>02-6233-4700</p>
+    </div>
+    <div class="iq-wm" aria-hidden="true">MIRAE I&amp;C</div>
+  </div>
+  <div class="iq-right">
+    <form id="inq" novalidate>
+      <div class="frow"><label for="fldName">업체명 <i>*</i></label><input id="fldName" type="text" placeholder="업체명을 입력해주세요." autocomplete="organization"></div>
+      <div class="frow"><label for="fldUrl">사이트URL</label><input id="fldUrl" type="text" inputmode="url" placeholder="홈페이지 주소를 입력해주세요." autocomplete="url"></div>
+      <div class="frow"><label for="fldManager">담당자 <i>*</i></label><input id="fldManager" type="text" placeholder="담당자 이름을 입력해주세요." autocomplete="name"></div>
+      <div class="frow"><label for="fldContact">연락처 <i>*</i></label><input id="fldContact" type="tel" inputmode="tel" placeholder="연락처를 입력해주세요.(-제외)" autocomplete="tel"></div>
+      <div class="frow"><label for="fldEmail">이메일</label><input id="fldEmail" type="email" placeholder="이메일을 입력해주세요." autocomplete="email"></div>
+      <div class="frow"><label for="fldProduct">광고상품</label><select id="fldProduct"><option value="">광고상품</option><option>파워링크</option><option>쇼핑검색</option><option>브랜드검색</option><option>GFA</option><option>기타</option></select></div>
+      <div class="frow"><label for="fldBudgetRange">월 광고예산</label><select id="fldBudgetRange"><option value="">선택하지 않음</option><option>100만원 미만</option><option>100~300만원</option><option>300~500만원</option><option>500~1,000만원</option><option>1,000만원 이상</option></select></div>
+      <div class="frow top"><label for="fldMessage">문의내용</label><textarea id="fldMessage" placeholder="문의내용을 입력해주세요."></textarea></div>
+      <label class="agree"><input type="checkbox" id="fldConsent"><span>개인정보 수집 및 이용에 동의합니다. 수집된 정보는 상담 목적으로만 사용됩니다.</span><button type="button" class="more" id="consentMore">자세히</button></label>
+      <div class="consent-detail" id="consentDetail">수집 항목: 업체명, 사이트URL, 담당자, 연락처, 이메일, 광고상품, 월 광고예산, 문의내용 · 수집 목적: 상담 신청 접수 및 연락 · 보유 기간: 상담 완료 후 6개월 보관 후 파기 · 동의를 거부할 권리가 있으며, 동의하지 않을 경우 상담 신청이 제한될 수 있습니다.</div>
+      <button class="btn btn-primary" type="submit" id="submitBtn">문의하기 ›</button>
+      <p class="form-msg" id="fm"></p>
+    </form>
+  </div>
+</section>
+
+<dialog class="pop" id="pop" aria-labelledby="popTitle">
+  <div class="pop-in">
+    <button type="button" class="pop-x" id="popX" aria-label="닫기">×</button>
+    <span class="pop-tag" id="popTag"></span>
+    <h3 id="popTitle"></h3>
+    <p class="pop-lead" id="popLead"></p>
+    <div class="pop-list" id="popList"></div>
+    <p class="pop-note" id="popNote"></p>
+    <div class="pop-act">
+      <button type="button" class="btn btn-primary" id="popGo">무료 상세 진단 신청</button>
+      <button type="button" class="btn btn-ghost" id="popClose">닫기</button>
+    </div>
+  </div>
+</dialog>
+
+<footer class="foot">
+  <div class="wrap">
+    <b>MIRAE I&amp;C</b>
+    <p>(주)미래아이엔씨 · 네이버 공식 프리미어 파트너사</p>
+    <p>서울 본사 : 서울시 금천구 가산디지털2로 144 현대테라타워 가산DK 13층 · 02-6233-4700</p>
+    <p>공식 홈페이지 <a href="https://www.toup.net/" target="_blank" rel="noopener">www.toup.net</a> · © MIRAE I&amp;C. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // 업종별 예상 성과 (데모) — 임의 산정값
+  // [산정 근거] 공개 자료의 대략적 범위를 기준으로 대분류 기준값을 잡고, 중분류는 객단가·구매 관여도(고가/중고가/보통/저가)에 따라 보정했습니다.
+  //  - CTR: 네이버 검색광고 업종별 약 0.8~2.4% (네이버 비즈니스 플랫폼 리포트를 인용한 AMPM 인사이트, 2024)
+  //  - CPC: 네이버 파워링크 평균 약 530원, 쇼핑검색 약 100~500원, 뷰티 200~500원 (출처 미표기 가이드 포함)
+  //  - CVR: 국내 이커머스 평균 약 2% 안팎 (빅인사이트 2021 인용 자료)
+  //  - ROAS: 이커머스 약 300~500% (출처 미표기 가이드) / 계산식: ROAS = CVR x 객단가 / CPC, 범위 200~600%로 제한
+  // 정확한 조사 데이터가 아니며, 실제 계정 통계가 확보되면 교체할 예정입니다.
+  const CATEGORY_DATA = {
+    "가구/인테리어": {
+      "DIY자재/용품": { ctr: 1.1, cvr: 1.4, roas: 280, cpc: 450 },
+      "거실가구": { ctr: 0.9, cvr: 1.0, roas: 310, cpc: 580 },
+      "베개": { ctr: 1.1, cvr: 1.4, roas: 280, cpc: 450 },
+      "서재/사무용가구": { ctr: 0.9, cvr: 1.0, roas: 310, cpc: 580 },
+      "솜류": { ctr: 1.1, cvr: 1.4, roas: 280, cpc: 450 },
+      "수납가구": { ctr: 0.9, cvr: 1.0, roas: 310, cpc: 580 },
+      "수예": { ctr: 1.2, cvr: 1.7, roas: 240, cpc: 380 },
+      "아동/주니어가구": { ctr: 0.9, cvr: 1.0, roas: 310, cpc: 580 },
+      "아웃도어가구": { ctr: 1.0, cvr: 1.2, roas: 300, cpc: 500 },
+      "인테리어소품": { ctr: 1.2, cvr: 1.7, roas: 240, cpc: 380 },
+      "주방가구": { ctr: 0.9, cvr: 1.0, roas: 310, cpc: 580 },
+      "침구단품": { ctr: 1.1, cvr: 1.4, roas: 280, cpc: 450 },
+      "침구세트": { ctr: 1.0, cvr: 1.2, roas: 300, cpc: 500 },
+      "침실가구": { ctr: 0.9, cvr: 1.0, roas: 310, cpc: 580 },
+      "카페트/러그": { ctr: 1.0, cvr: 1.2, roas: 300, cpc: 500 },
+      "커튼/블라인드": { ctr: 1.0, cvr: 1.2, roas: 300, cpc: 500 },
+      "홈데코": { ctr: 1.2, cvr: 1.7, roas: 240, cpc: 380 }
+    },
+    "디지털/가전": {
+      "PC": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "PC부품": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "PC액세서리": { ctr: 1.0, cvr: 1.4, roas: 310, cpc: 410 },
+      "게임기/타이틀": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "계절가전": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "광학기기/용품": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "네트워크장비": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "노트북": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "노트북액세서리": { ctr: 1.0, cvr: 1.4, roas: 310, cpc: 410 },
+      "멀티미디어장비": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "모니터": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "모니터주변기기": { ctr: 0.9, cvr: 1.2, roas: 380, cpc: 480 },
+      "생활가전": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "소프트웨어": { ctr: 1.0, cvr: 1.4, roas: 310, cpc: 410 },
+      "영상가전": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "음향가전": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "이미용가전": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "자동차기기": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "저장장치": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "주방가전": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "주변기기": { ctr: 0.9, cvr: 1.2, roas: 380, cpc: 480 },
+      "청소기": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "카메라/캠코더용품": { ctr: 0.9, cvr: 1.2, roas: 380, cpc: 480 },
+      "태블릿PC": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "태블릿PC액세서리": { ctr: 1.0, cvr: 1.4, roas: 310, cpc: 410 },
+      "학습기기": { ctr: 0.9, cvr: 1.0, roas: 400, cpc: 530 },
+      "휴대폰": { ctr: 0.8, cvr: 0.8, roas: 390, cpc: 620 },
+      "휴대폰액세서리": { ctr: 1.0, cvr: 1.4, roas: 310, cpc: 410 }
+    },
+    "생활/건강": {
+      "건강관리용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "건강측정용품": { ctr: 1.4, cvr: 1.9, roas: 330, cpc: 310 },
+      "공구": { ctr: 1.4, cvr: 1.9, roas: 330, cpc: 310 },
+      "관상어용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "구강위생용품": { ctr: 1.7, cvr: 2.6, roas: 250, cpc: 240 },
+      "냉온/찜질용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "눈건강용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "당뇨관리용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "문구/사무용품": { ctr: 1.7, cvr: 2.6, roas: 250, cpc: 240 },
+      "물리치료/저주파용품": { ctr: 1.4, cvr: 1.9, roas: 330, cpc: 310 },
+      "반려동물": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "발건강용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "생활용품": { ctr: 1.7, cvr: 2.6, roas: 250, cpc: 240 },
+      "세탁용품": { ctr: 1.7, cvr: 2.6, roas: 250, cpc: 240 },
+      "수납/정리용품": { ctr: 1.7, cvr: 2.6, roas: 250, cpc: 240 },
+      "수집품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "실버용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "악기": { ctr: 1.3, cvr: 1.5, roas: 320, cpc: 360 },
+      "안마용품": { ctr: 1.3, cvr: 1.5, roas: 320, cpc: 360 },
+      "욕실용품": { ctr: 1.7, cvr: 2.6, roas: 250, cpc: 240 },
+      "원예/식물": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "의료용품": { ctr: 1.4, cvr: 1.9, roas: 330, cpc: 310 },
+      "자동차용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "재활운동용품": { ctr: 1.4, cvr: 1.9, roas: 330, cpc: 310 },
+      "정원/원예용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "좌욕/좌훈용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "주방용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 },
+      "청소용품": { ctr: 1.7, cvr: 2.6, roas: 250, cpc: 240 },
+      "화방용품": { ctr: 1.5, cvr: 2.2, roas: 300, cpc: 280 }
+    },
+    "스포츠/레저": {
+      "검도": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "골프": { ctr: 1.1, cvr: 1.3, roas: 330, cpc: 430 },
+      "권투": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "기타스포츠용품": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "낚시": { ctr: 1.2, cvr: 1.5, roas: 320, cpc: 360 },
+      "농구": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "당구용품": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "댄스": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "등산": { ctr: 1.2, cvr: 1.5, roas: 320, cpc: 360 },
+      "러닝용품": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "무술용품": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "배구": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "배드민턴": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "보호용품": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "볼링": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "수련용품": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "수영": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "스케이트/보드/롤러": { ctr: 1.2, cvr: 1.5, roas: 320, cpc: 360 },
+      "스쿼시": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "스키/보드": { ctr: 1.1, cvr: 1.3, roas: 330, cpc: 430 },
+      "스킨스쿠버": { ctr: 1.1, cvr: 1.3, roas: 330, cpc: 430 },
+      "스포츠액세서리": { ctr: 1.4, cvr: 2.2, roas: 260, cpc: 280 },
+      "야구": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "오토바이/스쿠터": { ctr: 1.1, cvr: 1.3, roas: 330, cpc: 430 },
+      "요가/필라테스": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "자전거": { ctr: 1.1, cvr: 1.3, roas: 330, cpc: 430 },
+      "족구": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "축구": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "캠핑": { ctr: 1.2, cvr: 1.5, roas: 320, cpc: 360 },
+      "탁구": { ctr: 1.3, cvr: 1.8, roas: 300, cpc: 330 },
+      "테니스": { ctr: 1.2, cvr: 1.5, roas: 320, cpc: 360 },
+      "헬스": { ctr: 1.2, cvr: 1.5, roas: 320, cpc: 360 }
+    },
+    "식품": {
+      "가루/분말류": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "건강식품": { ctr: 1.8, cvr: 2.4, roas: 390, cpc: 240 },
+      "김치": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "냉동/간편조리식품": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "농산물": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "다이어트식품": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "떡류": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "라면/면류": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "밀키트": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "반찬": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "빵/베이커리": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "소스/드레싱": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "수산물": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "스낵/과자": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "식용유/오일": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "아이스크림/빙수": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "유가공품": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "음료": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "장류": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "잼/시럽": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "전통과자": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "제과/제빵재료": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "젤리/사탕/초콜릿": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "조미료": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 },
+      "주류": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "즉석밥/즉석국": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "축산물": { ctr: 1.9, cvr: 2.8, roas: 360, cpc: 220 },
+      "통조림/캔": { ctr: 2.1, cvr: 3.4, roas: 300, cpc: 190 }
+    },
+    "여가/생활편의": {
+      "국내렌터카": { ctr: 0.9, cvr: 1.3, roas: 320, cpc: 460 },
+      "국내여행/체험": { ctr: 0.9, cvr: 1.3, roas: 320, cpc: 460 },
+      "생활편의": { ctr: 1.0, cvr: 1.5, roas: 290, cpc: 420 },
+      "예체능레슨": { ctr: 0.9, cvr: 1.3, roas: 320, cpc: 460 },
+      "원데이클래스": { ctr: 1.0, cvr: 1.5, roas: 290, cpc: 420 },
+      "자기계발/취미 레슨": { ctr: 0.9, cvr: 1.3, roas: 320, cpc: 460 },
+      "장기 국내여행/체험": { ctr: 0.8, cvr: 1.0, roas: 290, cpc: 550 },
+      "장기 해외여행": { ctr: 0.8, cvr: 1.0, roas: 290, cpc: 550 },
+      "해외여행": { ctr: 0.8, cvr: 1.0, roas: 290, cpc: 550 },
+      "홈케어서비스": { ctr: 0.9, cvr: 1.3, roas: 320, cpc: 460 }
+    },
+    "출산/육아": {
+      "교구": { ctr: 1.5, cvr: 2.2, roas: 420, cpc: 330 },
+      "구강청결용품": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "기저귀": { ctr: 1.5, cvr: 2.2, roas: 420, cpc: 330 },
+      "매트/안전용품": { ctr: 1.5, cvr: 2.2, roas: 420, cpc: 330 },
+      "목욕용품": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "물티슈": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "분유": { ctr: 1.5, cvr: 2.2, roas: 420, cpc: 330 },
+      "소독/살균용품": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "수영복/용품": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "수유용품": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "스킨/바디용품": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "신생아의류": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "아기간식": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "완구/인형": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "외출용품": { ctr: 1.5, cvr: 2.2, roas: 420, cpc: 330 },
+      "위생/건강용품": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "유모차": { ctr: 1.4, cvr: 1.8, roas: 420, cpc: 390 },
+      "유아가구/소품": { ctr: 1.4, cvr: 1.8, roas: 420, cpc: 390 },
+      "유아동 주얼리": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "유아동언더웨어/잠옷": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "유아동의류": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "유아동잡화": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "유아발육용품": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "유아세제": { ctr: 1.8, cvr: 3.1, roas: 320, cpc: 260 },
+      "유아침구": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "이유식": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "이유식용품": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "임부복": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "임산부용품": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "출산/돌기념품": { ctr: 1.6, cvr: 2.6, roas: 390, cpc: 300 },
+      "카시트": { ctr: 1.4, cvr: 1.8, roas: 420, cpc: 390 }
+    },
+    "패션의류": {
+      "남성언더웨어/잠옷": { ctr: 1.9, cvr: 2.9, roas: 330, cpc: 220 },
+      "남성의류": { ctr: 1.7, cvr: 2.4, roas: 390, cpc: 260 },
+      "여성언더웨어/잠옷": { ctr: 1.9, cvr: 2.9, roas: 330, cpc: 220 },
+      "여성의류": { ctr: 1.7, cvr: 2.4, roas: 390, cpc: 260 }
+    },
+    "패션잡화": {
+      "가방소품": { ctr: 1.7, cvr: 2.6, roas: 360, cpc: 240 },
+      "남성가방": { ctr: 1.4, cvr: 1.9, roas: 470, cpc: 310 },
+      "남성신발": { ctr: 1.5, cvr: 2.2, roas: 430, cpc: 280 },
+      "모자": { ctr: 1.5, cvr: 2.2, roas: 430, cpc: 280 },
+      "벨트": { ctr: 1.5, cvr: 2.2, roas: 430, cpc: 280 },
+      "선글라스/안경테": { ctr: 1.4, cvr: 1.9, roas: 470, cpc: 310 },
+      "순금": { ctr: 1.3, cvr: 1.5, roas: 460, cpc: 360 },
+      "시계": { ctr: 1.3, cvr: 1.5, roas: 460, cpc: 360 },
+      "신발용품": { ctr: 1.7, cvr: 2.6, roas: 360, cpc: 240 },
+      "양말": { ctr: 1.7, cvr: 2.6, roas: 360, cpc: 240 },
+      "여성가방": { ctr: 1.4, cvr: 1.9, roas: 470, cpc: 310 },
+      "여성신발": { ctr: 1.5, cvr: 2.2, roas: 430, cpc: 280 },
+      "여행용가방/소품": { ctr: 1.4, cvr: 1.9, roas: 470, cpc: 310 },
+      "장갑": { ctr: 1.7, cvr: 2.6, roas: 360, cpc: 240 },
+      "주얼리": { ctr: 1.4, cvr: 1.9, roas: 470, cpc: 310 },
+      "지갑": { ctr: 1.5, cvr: 2.2, roas: 430, cpc: 280 },
+      "패션소품": { ctr: 1.7, cvr: 2.6, roas: 360, cpc: 240 },
+      "헤어액세서리": { ctr: 1.7, cvr: 2.6, roas: 360, cpc: 240 }
+    },
+    "화장품/미용": {
+      "남성화장품": { ctr: 2.0, cvr: 3.0, roas: 330, cpc: 300 },
+      "네일케어": { ctr: 2.2, cvr: 3.6, roas: 270, cpc: 260 },
+      "마스크/팩": { ctr: 2.2, cvr: 3.6, roas: 270, cpc: 260 },
+      "바디케어": { ctr: 2.0, cvr: 3.0, roas: 330, cpc: 300 },
+      "베이스메이크업": { ctr: 2.0, cvr: 3.0, roas: 330, cpc: 300 },
+      "뷰티소품": { ctr: 2.2, cvr: 3.6, roas: 270, cpc: 260 },
+      "색조메이크업": { ctr: 2.0, cvr: 3.0, roas: 330, cpc: 300 },
+      "선케어": { ctr: 2.0, cvr: 3.0, roas: 330, cpc: 300 },
+      "스킨케어": { ctr: 2.0, cvr: 3.0, roas: 330, cpc: 300 },
+      "클렌징": { ctr: 2.2, cvr: 3.6, roas: 270, cpc: 260 },
+      "향수": { ctr: 1.9, cvr: 2.5, roas: 350, cpc: 330 },
+      "헤어스타일링": { ctr: 2.2, cvr: 3.6, roas: 270, cpc: 260 },
+      "헤어케어": { ctr: 2.0, cvr: 3.0, roas: 330, cpc: 300 }
+    }
+  };
+  const FORMSPREE_ENDPOINT = 'https://formsubmit.co/ajax/wodus0117@toup.net';
+
+  const $ = id => document.getElementById(id);
+  let current = null;
+  let inquiryType = '';
+
+  // ---- 업종 드롭다운 ----
+  Object.keys(CATEGORY_DATA).forEach(m => {
+    const o = document.createElement('option'); o.value = m; o.textContent = m; $('selMain').appendChild(o);
+  });
+  $('selMain').addEventListener('change', () => {
+    const main = $('selMain').value, sub = $('selSub');
+    sub.innerHTML = '';
+    if(!main){
+      sub.disabled = true; sub.innerHTML = '<option value="">대분류를 먼저 선택해 주세요</option>';
+    } else {
+      sub.disabled = false;
+      sub.innerHTML = '<option value="">선택해 주세요</option>';
+      Object.keys(CATEGORY_DATA[main]).forEach(s => {
+        const o = document.createElement('option'); o.value = s; o.textContent = s; sub.appendChild(o);
+      });
+    }
+    onInputsChanged();
+  });
+  $('selSub').addEventListener('change', onInputsChanged);
+  function budgetValue(){ return Number(String($('inputBudget').value).replace(/[^0-9]/g,'')) || 0; }
+  // 입력하는 즉시 천 단위 쉼표 표시 (커서 위치 유지)
+  $('inputBudget').addEventListener('input', e => {
+    const el = e.target, pos = el.selectionStart, before = el.value;
+    const digitsBeforeCaret = before.slice(0, pos).replace(/[^0-9]/g,'').length;
+    const digits = before.replace(/[^0-9]/g,'').replace(/^0+(?=\d)/,'');
+    el.value = digits ? Number(digits).toLocaleString('en-US') : '';
+    let n = 0, i = 0;
+    while(i < el.value.length && n < digitsBeforeCaret){ if(/[0-9]/.test(el.value[i])) n++; i++; }
+    try{ el.setSelectionRange(i, i); }catch(_){}
+    onInputsChanged();
+  });
+  $('analyzeBtn').addEventListener('click', analyze);
+  $('inputBudget').addEventListener('keydown', e => { if(e.key === 'Enter' && !$('analyzeBtn').disabled) analyze(); });
+
+  function onInputsChanged(){
+    const budget = budgetValue();
+    const valid = $('selMain').value && $('selSub').value && budget > 0;
+    $('analyzeBtn').disabled = !valid;
+    const shown = $('results').classList.contains('show');
+    const changed = shown && current && (
+      current.main !== $('selMain').value || current.sub !== $('selSub').value || current.budget !== budget);
+    $('results').classList.toggle('stale', !!changed);
+    $('staleHint').style.display = changed ? 'block' : 'none';
+    $('analyzeBtn').textContent = shown ? '다시 분석하기' : '분석하기';
+  }
+
+  function won(n){
+    if(n >= 100000000) return (n/100000000).toFixed(1).replace(/\.0$/,'') + '억';
+    if(n >= 10000) return Math.round(n/10000).toLocaleString() + '만';
+    return n.toLocaleString();
+  }
+
+  // ---- 분석하기 ----
+  function analyze(){
+    const main = $('selMain').value, sub = $('selSub').value;
+    const budget = budgetValue();
+    if(!(main && sub && budget > 0)) return;
+    const data = CATEGORY_DATA[main][sub];
+    current = { main, sub, budget, data };
+    $('results').classList.remove('stale');
+    $('staleHint').style.display = 'none';
+    $('analyzeBtn').textContent = '다시 분석하기';
+
+    $('benchTitle').textContent = main + ' > ' + sub + ' 업종 평균 성과';
+    $('results').classList.add('show');
+
+    const clicks = Math.round(budget / data.cpc);
+    const conv = Math.round(clicks * data.cvr / 100);
+    const revenue = Math.round(budget * data.roas / 100);
+    $('estClicks').innerHTML  = clicks.toLocaleString() + '<small>회</small>';
+    $('estConv').innerHTML    = conv.toLocaleString() + '<small>건</small>';
+    $('estRevenue').innerHTML = won(revenue) + '<small>원</small>';
+
+    syncBudgetRange();
+    updateCompare();
+    setTimeout(() => $('results').scrollIntoView({behavior:'smooth', block:'start'}), 80);
+  }
+
+  // ---- 범위형 게이지 (예상 범위 + 업종 평균 + 내 성과) ----
+  const METRICS = [
+    {k:'ctr',  name:'클릭률 (CTR)',            unit:'%', dec:1, ph:'예: 1.2', step:'0.1'},
+    {k:'cvr',  name:'전환율 (CVR)',            unit:'%', dec:1, ph:'예: 2.0', step:'0.1'},
+    {k:'roas', name:'광고비 대비 매출 (ROAS)', unit:'%', dec:0, ph:'예: 300', step:'1'}
+  ];
+  const RANGE_LO = 0.65, RANGE_HI = 1.4;   // 업종 평균 대비 예상 범위(임의 산정)
+  const fmt = (v, dec) => Number(v).toFixed(dec).replace(/\.0$/,'');
+  METRICS.forEach(m => {
+    $('gauges').insertAdjacentHTML('beforeend', `
+      <div class="g-row">
+        <div class="g-head"><span class="g-name">${m.name}</span><span class="g-sum" id="${m.k}Sum"></span></div>
+        <div class="g-body">
+          <div class="g-plot">
+            <div class="g-line"></div>
+            <div class="g-band" id="${m.k}Band"><span class="lo" id="${m.k}Lo"></span><span class="hi" id="${m.k}Hi"></span></div>
+            <div class="g-med" id="${m.k}Med"><em id="${m.k}MedLbl"></em></div>
+            <div class="g-dot" id="${m.k}Dot"></div>
+            <div class="g-me" id="${m.k}Me"></div>
+          </div>
+          <div class="myin"><label for="my${m.k[0].toUpperCase()+m.k.slice(1)}">내 ${m.k.toUpperCase()} (%)</label>
+            <input type="number" id="my${m.k[0].toUpperCase()+m.k.slice(1)}" step="${m.step}" min="0" inputmode="decimal" placeholder="${m.ph}"></div>
+        </div>
+        <span class="status-pill" id="${m.k}Pill"></span>
+      </div>`);
+  });
+  ['myCtr','myCvr','myRoas'].forEach(id => $(id).addEventListener('input', updateCompare));
+
+  // ---- 내 성과 입력 → 게이지에 표시 + 추천 카드 ----
+  function updateCompare(){
+    if(!current) return;
+    const d = current.data, entered = []; let anyLow = false;
+    METRICS.forEach(m => {
+      const med = d[m.k], lo = med * RANGE_LO, hi = med * RANGE_HI;
+      const mine = parseFloat($('my' + m.k[0].toUpperCase() + m.k.slice(1)).value);
+      const hasMine = !isNaN(mine);
+      const max = Math.max(hi * 1.25, hasMine ? mine * 1.12 : 0);
+      const pct = v => Math.min(100, Math.max(0, v / max * 100));
+      $(m.k + 'Sum').textContent = '업종 평균 ' + fmt(med, m.dec) + '% · 예상 범위 ' + fmt(lo, m.dec) + '~' + fmt(hi, m.dec) + '%';
+      $(m.k + 'Band').style.left = pct(lo) + '%';
+      $(m.k + 'Band').style.width = (pct(hi) - pct(lo)) + '%';
+      $(m.k + 'Lo').textContent = fmt(lo, m.dec);
+      $(m.k + 'Hi').textContent = fmt(hi, m.dec);
+      $(m.k + 'Med').style.left = pct(med) + '%';
+      $(m.k + 'MedLbl').textContent = '평균 ' + fmt(med, m.dec) + '%';
+      const dot = $(m.k + 'Dot'), me = $(m.k + 'Me'), pill = $(m.k + 'Pill');
+      if(!hasMine){
+        dot.classList.remove('on'); me.classList.remove('on'); pill.classList.remove('on'); return;
+      }
+      const eq = Math.abs(mine - med) < 1e-9, up = mine > med, cls = eq ? 'eq' : (up ? 'up' : 'dn');
+      dot.className = 'g-dot on ' + cls; dot.style.left = pct(mine) + '%';
+      me.className = 'g-me on ' + cls; me.style.left = pct(mine) + '%';
+      me.textContent = '내 성과 ' + fmt(mine, m.dec) + '%';
+      pill.className = 'status-pill on ' + (eq ? 'status-eq' : (up ? 'status-up' : 'status-down'));
+      pill.textContent = eq ? '업종 평균과 동일' : (up ? '업종 평균 이상' : '업종 평균 이하');
+      entered.push(true); if(mine < med) anyLow = true;
+    });
+    $('cardImprove').classList.remove('recommended');
+    $('cardExpand').classList.remove('recommended');
+    // 추천 기준: 입력한 지표 중 하나라도 업종 평균보다 낮으면 A, 입력한 지표가 모두 평균 이상일 때만 B
+    if(entered.length){
+      (anyLow ? $('cardImprove') : $('cardExpand')).classList.add('recommended');
+    }
+  }
+
+  // ---- 카드 클릭 → 하단 문의 섹션으로 이동 (문의 유형 자동 입력) ----
+  // 월 광고예산 선택란: 분석에 입력한 금액에 맞는 구간을 자동 선택 (광고주가 직접 바꾼 경우는 유지)
+  let budgetTouched = false;
+  $('fldBudgetRange').addEventListener('change', () => { budgetTouched = true; });
+  function syncBudgetRange(){
+    if(!current || budgetTouched) return;
+    const man = current.budget / 10000;
+    $('fldBudgetRange').value = man < 100 ? '100만원 미만' : man < 300 ? '100~300만원' : man < 500 ? '300~500만원' : man < 1000 ? '500~1,000만원' : '1,000만원 이상';
+  }
+  function setInquiry(type){
+    inquiryType = type || '';
+    syncBudgetRange();
+  }
+
+  // ---- 상담 유형 팝업 ----
+  const IMPROVE_TIPS = {
+    ctr:  {t:'클릭률이 업종 평균보다 낮습니다', d:'광고 문구·이미지와 확장소재, 노출되는 키워드와 순위부터 점검해 볼 부분이 있습니다.'},
+    cvr:  {t:'전환율이 업종 평균보다 낮습니다', d:'유입 키워드가 상품과 맞는지, 상세페이지·가격·리뷰 등 클릭 이후 구간에서 이탈하는 곳이 없는지 확인이 필요합니다.'},
+    roas: {t:'ROAS가 업종 평균보다 낮습니다', d:'효율이 낮은 키워드와 입찰가, 캠페인 구조를 다시 살펴보면 같은 예산으로 개선할 여지가 있습니다.'}
+  };
+  function popContent(type){
+    const where = current ? current.main + ' > ' + current.sub : '';
+    if(type === '성과 개선 상담'){
+      const mine = {ctr:parseFloat($('myCtr').value), cvr:parseFloat($('myCvr').value), roas:parseFloat($('myRoas').value)};
+      const weak = current ? ['ctr','cvr','roas'].filter(k => !isNaN(mine[k]) && mine[k] < current.data[k]) : [];
+      const entered = ['ctr','cvr','roas'].some(k => !isNaN(mine[k]));
+      let items;
+      if(weak.length){
+        items = weak.map(k => ({t:IMPROVE_TIPS[k].t, d:IMPROVE_TIPS[k].d, dn:true}));
+      } else if(entered){
+        items = [{t:'입력하신 지표는 업종 평균 이상입니다', d:'그래도 세부 키워드·소재 단위에서는 개선할 부분이 남아 있을 수 있어, 계정 데이터를 열어 함께 확인해 드립니다.'}];
+      } else {
+        items = [
+          {t:'클릭률', d:'광고 문구·이미지, 확장소재, 노출 순위를 점검합니다.'},
+          {t:'전환율', d:'유입 키워드의 적합성과 클릭 이후 이탈 구간을 확인합니다.'},
+          {t:'ROAS', d:'효율이 낮은 키워드와 입찰가, 캠페인 구조를 점검합니다.'}];
+      }
+      return {tag:'성과 개선 상담', title:'지금 광고, 어디를 먼저 손보면 좋을지 짚어드립니다',
+        lead:(where ? where + ' 업종 평균과 비교해, ' : '') + '개선 여지가 있는 부분을 먼저 확인해 보세요.', items,
+        note:'실제 개선 방향은 계정 데이터를 확인한 뒤 구체적으로 안내해 드립니다.'};
+    }
+    if(type === '매체 확장 상담'){
+      return {tag:'매체 확장 상담', title:'네이버에서 성과가 안정적이라면, 확장을 검토해 볼 타이밍입니다',
+        lead:(where ? where + ' 업종도 ' : '') + '네이버 외 매체에서 새로운 고객을 만날 수 있습니다.',
+        items:[
+          {t:'구글 (검색·유튜브·디스커버리)', d:'검색 의도가 있는 고객과 영상 매체의 신규 고객을 함께 만날 수 있습니다.'},
+          {t:'메타 (인스타그램·페이스북)', d:'이미지·영상 소재로 관심을 일으키고, 방문한 고객을 다시 불러오는 리마케팅에 활용합니다.'},
+          {t:'매체별 예산 배분', d:'네이버 성과를 해치지 않는 선에서 시작 예산과 성과 기준을 정해 단계적으로 늘립니다.'}],
+        note:'매체별 실제 성과는 상품·계정에 따라 크게 다를 수 있어, 상담에서 현황을 보고 안내해 드립니다.'};
+    }
+    return {tag:'성과 진단 상담', title:'내 성과가 어느 정도인지, 계정을 직접 보고 알려드립니다',
+      lead:'비밀번호 등 어떠한 정보도 필요 없는 운영조회(열람 전용) 권한만 주시면 아래 항목을 확인합니다.',
+      items:[
+        {t:'변경 이력', d:'입찰가·예산·소재 변경이 성과에 어떤 영향을 줬는지 확인합니다.'},
+        {t:'노출 제한 관리와 무효클릭', d:'불필요하게 노출·클릭되는 구간이 없는지 점검합니다.'},
+        {t:'데이터와 구조', d:'키워드·캠페인 구조와 전환 데이터가 제대로 쌓이고 있는지 봅니다.'}],
+      note:'진단 결과는 항목별로 정리해서 무료로 안내해 드립니다.'};
+  }
+  const pop = $('pop');
+  function openPop(type){
+    const c = popContent(type);
+    $('popTag').textContent = c.tag; $('popTitle').textContent = c.title; $('popLead').textContent = c.lead;
+    $('popList').innerHTML = c.items.map(i => `<div class="pop-item"><b class="${i.dn ? 'dn' : ''}">${i.t}</b><p>${i.d}</p></div>`).join('');
+    $('popNote').textContent = c.note;
+    pop.dataset.type = type;
+    if(pop.showModal) pop.showModal(); else pop.setAttribute('open','');
+  }
+  function closePop(){ if(pop.close) pop.close(); else pop.removeAttribute('open'); }
+  $('popX').addEventListener('click', closePop);
+  $('popClose').addEventListener('click', closePop);
+  pop.addEventListener('click', e => { if(e.target === pop) closePop(); });   // 바깥 영역 클릭 시 닫기
+  $('popGo').addEventListener('click', () => {
+    setInquiry(pop.dataset.type); closePop();
+    $('contact').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  document.querySelectorAll('.q').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.q').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      openPop(card.dataset.type);
+    });
+  });
+  document.querySelectorAll('a[data-type]').forEach(a => a.addEventListener('click', () => setInquiry(a.dataset.type)));
+
+  // ---- 개인정보 동의 자세히 보기 ----
+  $('consentMore').addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); $('consentDetail').classList.toggle('show'); });
+
+  // ---- 전송 (Formspree) ----
+  $('inq').addEventListener('submit', async e => {
+    e.preventDefault();
+    const fm = $('fm');
+    const show = (msg, color) => { fm.style.color = color; fm.textContent = msg; fm.style.display = 'block'; };
+    const v = id => $(id).value.trim();
+    if(!v('fldName') || !v('fldManager') || !v('fldContact')){ show('업체명, 담당자, 연락처를 입력해 주세요.', '#d8302a'); return; }
+    if(!$('fldConsent').checked){ show('개인정보 수집 및 이용에 동의해 주세요.', '#d8302a'); return; }
+    fm.style.display = 'none';
+    const btn = $('submitBtn'); btn.disabled = true; btn.textContent = '보내는 중...';
+
+    const mine = ['myCtr','myCvr','myRoas'].map((id,i) => {
+      const val = $(id).value; return val ? ['CTR','CVR','ROAS'][i] + ' ' + val + '%' : null;
+    }).filter(Boolean).join(', ');
+    const payload = {
+      _template: 'table', _captcha: 'false', _subject: '[업종별 성과분석] 상담신청',
+      문의유형: inquiryType || '일반 문의',
+      업체명: v('fldName'),
+      사이트URL: v('fldUrl') || '(작성 안 함)',
+      담당자: v('fldManager'),
+      연락처: v('fldContact'),
+      이메일: v('fldEmail') || '(작성 안 함)',
+      광고상품: $('fldProduct').value || '(선택 안 함)',
+      월_광고예산: $('fldBudgetRange').value || '(선택 안 함)',
+      선택업종: current ? current.main + ' > ' + current.sub : '(미선택)',
+      분석에_입력한_월광고비: current ? current.budget.toLocaleString() + '원' : '(미입력)',
+      내_성과_입력값: mine || '(입력 안 함)',
+      개인정보_수집이용_동의: '동의함',
+      문의내용: v('fldMessage') || '(작성 안 함)'
+    };
+    try{
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const _j = await res.json().catch(function(){return {};}); if(!res.ok || String(_j.success)!=='true') throw new Error('fail');
+      $('inq').reset(); budgetTouched = false; syncBudgetRange();
+      show('문의가 접수되었습니다. 확인 후 연락드리겠습니다.', '#4458e2');
+    }catch(_){
+      show('전송 중 문제가 생겼습니다. 010-3241-4127로 연락 주세요.', '#d8302a');
+    }finally{
+      btn.disabled = false; btn.textContent = '문의하기 ›';
+    }
+  });
+</script>
+
+<script data-goatcounter="https://wodus0117.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

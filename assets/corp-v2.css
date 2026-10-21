@@ -778,3 +778,15 @@ section.block.soft :is(.stat,.tp-col,.abx-t,.mwrap,.svc,.q,.case-card,.st,.sp,.s
 @media(max-width:480px){.vz-cycle{grid-template-columns:1fr}.vz-struct{grid-template-columns:1fr;}.vz-struct i{transform:rotate(90deg)}}
 .pt4{margin-top:48px}
 @media(max-width:480px){.vz-bar b{font-size:11px}}
+
+/* ===== v17 hero partner strip ===== */
+.hp{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:24px;padding:14px 14px 14px 16px;background:#fff;border:1px solid var(--line);border-radius:16px;max-width:620px}
+.hp-txt{display:flex;align-items:center;gap:12px;min-width:0}
+.hp-badge{flex:0 0 auto;font-family:"Plus Jakarta Sans",sans-serif;font-size:11px;font-weight:800;letter-spacing:.12em;color:#fff;background:#03c75a;border-radius:8px;padding:7px 9px}
+.hp p{font-size:14.5px;color:var(--sub);line-height:1.5}
+.hp p b{color:var(--ink);font-weight:800}
+.hp p small{display:block;font-size:12.5px;color:var(--mute)}
+.hp-btn{flex:0 0 auto;font-size:14px;font-weight:800;color:#fff;background:var(--brand);padding:10px 16px;border-radius:10px;white-space:nowrap}
+.hp-btn:hover{background:var(--brand-deep)}
+@media(max-width:560px){.hp{flex-direction:column;align-items:stretch}.hp-btn{text-align:center}}
+.hp{max-width:640px;flex-wrap:nowrap}@media(max-width:560px){.hp{flex-wrap:wrap}}
